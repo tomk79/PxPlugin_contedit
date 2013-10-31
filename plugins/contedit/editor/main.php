@@ -7,19 +7,17 @@ class pxplugin_contedit_editor_main{
 
 	private $px;
 	private $plugin_obj;
-	private $theme_obj;
-	private $layout_obj;
+	private $page_info;
 
 	/**
 	 * コンストラクタ
 	 * @param $command = PXコマンド配列
 	 * @param $px = PxFWコアオブジェクト
 	 */
-	public function __construct( $px, $plugin_obj, $theme_obj, $layout_obj ){
+	public function __construct( $px, $plugin_obj, $page_info ){
 		$this->px = $px;
 		$this->plugin_obj = $plugin_obj;
-		$this->theme_obj = $theme_obj;
-		$this->layout_obj = $layout_obj;
+		$this->page_info = $page_info;
 	}
 
 	/**
@@ -123,10 +121,10 @@ body{
 </head>
 <body>
 <div class="conteditUI conteditUI-controlpanel">
-	<div class="conteditUI-title">contedit: <?php print t::h( $this->theme_obj->get_theme_id() ); ?>/<?php print t::h( $this->layout_obj->get_layout_id() ); ?></div>
+	<div class="conteditUI-title">contedit: <?php print t::h( $this->page_info['title'] ); ?></div>
 	<div>
-		<a href="<?php print t::h($this->plugin_obj->href( ':property.'.$this->theme_obj->get_theme_id() )); ?>" target="_top" class="conteditUI-btn_cancel" onclick="if( !confirm('編集内容は保存されていません。画面を遷移してもよろしいですか？') ){return false;}">キャンセル</a>
-		<a href="<?php print t::h($this->plugin_obj->href( ':property.'.$this->theme_obj->get_theme_id() )); ?>" target="_top" class="conteditUI-btn_ok" onclick="alert('開発中です。');return true;">保存</a>
+		<a href="<?php print t::h($this->plugin_obj->href( ':' )); ?>" target="_top" class="conteditUI-btn_cancel" onclick="if( !confirm('編集内容は保存されていません。画面を遷移してもよろしいですか？') ){return false;}">キャンセル</a>
+		<a href="<?php print t::h($this->plugin_obj->href( ':' )); ?>" target="_top" class="conteditUI-btn_ok" onclick="alert('開発中です。');return true;">保存</a>
 	</div>
 </div>
 <div class="conteditUI conteditUI-canvas"><iframe src="<?php print t::h( $this->href('canvas') ); ?>" class="conteditUI-canvas_iframe"></iframe></div>
@@ -142,7 +140,8 @@ body{
 	 * ホーム画面
 	 */
 	private function page_canvas(){
-		$obj_target_theme = $this->theme_obj->factory_theme( $this->layout_obj->get_layout_id() );
+		$theme_obj = $this->plugin_obj->factory_model_theme( $this->page_info );
+		$obj_target_theme = $theme_obj->factory_theme( $this->page_info['layout'] );
 
 		header('Content-type: text/html');
 		$src = '';

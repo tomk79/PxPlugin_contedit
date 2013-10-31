@@ -20,7 +20,7 @@ class pxplugin_contedit_models_theme{
 	 */
 	public function __construct( $px, $theme_id, $plugin_obj ){
 		$this->px = $px;
-		$this->theme_id = $theme_id;
+		$this->theme_id = $this->px->theme()->get_theme_id();
 		$this->plugin_obj = $plugin_obj;
 	}
 

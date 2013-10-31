@@ -46,23 +46,68 @@ class pxplugin_contedit_register_object{
 		return $path_theme_dir;
 	}
 
+	/**
+	 * コンテンツファイルの情報を取得する
+	 */
+	public function get_content_file_info( $page_info ){
+		$realpath_base = $this->px->dbh()->get_realpath( $_SERVER['DOCUMENT_ROOT'].'/'.$this->px->get_install_path() ).'/';
+
+		$rtn = array();
+		if( strlen( $page_info['content'] ) ){
+			$rtn['path'] = $this->px->dbh()->get_realpath( $realpath_base.$page_info['content'] );
+		}
+		if( !strlen($rtn['path']) && strlen( $page_info['path'] ) ){
+			$parsed_url = parse_url($page_info['path']);
+			$page_info['path'] = $parsed_url['path'];
+			$rtn['path'] = $this->px->dbh()->get_realpath( $realpath_base.$page_info['path'] );
+		}
+
+		//------
+		//  拡張子違いのコンテンツを検索
+		//  リクエストはmod_rewriteの設定上、*.html でしかこない。
+		//  a.html のクエリでも、a.html.php があれば、a.html.php を採用できるようにしている。
+		$list_extensions = $this->px->get_extensions_list();
+		foreach( $list_extensions as $row_extension ){
+			if( @is_file($rtn['path'].'.'.$row_extension) ){
+				$rtn['path'] = $rtn['path'].'.'.$row_extension;
+				break;
+			}
+		}
+		//  / 拡張子違いのコンテンツを検索
+		//------
+
+		if( is_file( $rtn['path'] ) ){
+			$rtn['extension'] = strtolower( $this->px->dbh()->get_extension( $rtn['path'] ) );
+		}
+
+		return $rtn;
+	}
 
 	/**
 	 * factory: エディター
 	 */
-	public function factory_editor( $theme_obj, $layout_obj ){
+	public function factory_editor( $page_info ){
 		$name = 'main';
 		$class_name = $this->px->load_px_plugin_class('/contedit/editor/'.$name.'.php');
-		$obj = new $class_name( $this->px, $this, $theme_obj, $layout_obj );
+		$obj = new $class_name( $this->px, $this, $page_info );
+		return $obj;
+	}
+
+	/**
+	 * factory: コンテンツモデル
+	 */
+	public function factory_model_content( $page_info ){
+		$class_name = $this->px->load_px_plugin_class('/contedit/models/content.php');
+		$obj = new $class_name( $this->px, $page_info, $this );
 		return $obj;
 	}
 
 	/**
 	 * factory: テーマモデル
 	 */
-	public function factory_model_theme( $theme_id ){
+	public function factory_model_theme( $page_info ){
 		$class_name = $this->px->load_px_plugin_class('/contedit/models/theme.php');
-		$obj = new $class_name( $this->px, $theme_id, $this );
+		$obj = new $class_name( $this->px, $page_info, $this );
 		return $obj;
 	}
 
@@ -79,7 +124,6 @@ class pxplugin_contedit_register_object{
 			return '?PX=plugins.contedit';
 		}
 		$rtn = preg_replace('/^\:/','?PX=plugins.contedit.',$linkto);
-
 		$rtn = $this->px->theme()->href( $rtn );
 		return $rtn;
 	}
