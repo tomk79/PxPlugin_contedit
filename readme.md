@@ -15,6 +15,13 @@
 
 
 ------
+
+## Pickles Framework について
+
+公式サイトを参照ください。
+http://pickles.pxt.jp/
+
+------
 (C)Tomoya Koyanagi.
 http://www.pxt.jp/
 
