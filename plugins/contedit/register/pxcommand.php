@@ -59,26 +59,42 @@ class pxplugin_contedit_register_pxcommand extends px_bases_pxcommand{
 		$src .= '<p>コンテンツを編集するプラグインです。</p>'."\n";
 		$src .= ''."\n";
 
-		$sitemap = $this->px->site()->get_sitemap();
+		$top_page_info = $this->px->site()->get_page_info('');
 
-		if( !count($sitemap) ){
-			$src .= '<p class="error">サイトマップにページが登録されていません。</p>'."\n";
+		if( !count($top_page_info) ){
+			$src .= '<p class="error">サイトマップにトップページが登録されていません。</p>'."\n";
 		}else{
 			$src .= '<div class="unit">'."\n";
-			$src .= '<ul>'."\n";
-			foreach( $sitemap as $path=>$page_info ){
-				$path_content = $this->plugin_obj->get_content_file_info($page_info);
-				$src .= '	<li>'.t::h( $page_info['title'] );
-				if( is_file($path_content['path']) ){
-					$src .= ' <a href="'.t::h( $this->px->theme()->href( $page_info['path'] ).'?PX=plugins.contedit.edit' ).'">編集する</a>';
-				}
-				$src .= '</li>'."\n";
-			}
-			$src .= '</ul>'."\n";
+			$src .= '	<ul>'."\n";
+			$src .= '		<li>'.t::h( $top_page_info['title'] );
+			$src .= ' <a href="'.t::h( $this->px->theme()->href( $top_page_info['path'].'?PX=plugins.contedit.edit' ) ).'">編集する</a>';
+			$src .= $this->mk_sitemap_tree($top_page_info, array('filter'=>false));
+			$src .= '		</li>'."\n";
+			$src .= '	</ul>'."\n";
 			$src .= '</div>'."\n";
 		}
 
 		return $src;
+	}
+	/**
+	 * サイトマップツリーを作る
+	 */
+	private function mk_sitemap_tree( $parent_page_info ){
+		if(!is_array($parent_page_info)){return '';}
+		$children = $this->px->site()->get_children( $parent_page_info['id'], array('filter'=>false) );
+		if( !count($children) ){ return ''; }
+
+		$rtn = '';
+		$rtn .= '<ul>'."\n";
+		foreach( $children as $child ){
+			$page_info = $this->px->site()->get_page_info( $child );
+			$rtn .= '<li>'.t::h($page_info['title']);
+			$rtn .= ' <a href="'.t::h( $this->px->theme()->href( $page_info['path'].'?PX=plugins.contedit.edit' ) ).'">編集する</a>';
+			$rtn .= $this->mk_sitemap_tree($page_info);
+			$rtn .= '</li>';
+		}
+		$rtn .= '</ul>'."\n";
+		return $rtn;
 	}
 
 
