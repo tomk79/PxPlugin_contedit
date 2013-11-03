@@ -142,6 +142,7 @@ body{
 	private function page_canvas(){
 		$theme_obj = $this->plugin_obj->factory_model_theme( $this->page_info );
 		$obj_target_theme = $theme_obj->factory_theme( $this->page_info['layout'] );
+		$obj_modules = $this->plugin_obj->factory_model_modules();
 
 		header('Content-type: text/html');
 		$src = '';

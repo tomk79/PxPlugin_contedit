@@ -94,6 +94,15 @@ class pxplugin_contedit_register_object{
 	}
 
 	/**
+	 * factory: モジュールモデル
+	 */
+	public function factory_model_modules(){
+		$class_name = $this->px->load_px_plugin_class('/contedit/models/modules.php');
+		$obj = new $class_name( $this->px, $this );
+		return $obj;
+	}
+
+	/**
 	 * factory: コンテンツモデル
 	 */
 	public function factory_model_content( $page_info ){
