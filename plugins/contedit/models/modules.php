@@ -43,6 +43,31 @@ class pxplugin_contedit_models_modules{
 		return true;
 	}
 
+	/**
+	 * モジュール一覧を取得する
+	 */
+	public function get_module_list(){
+		return $this->modules;
+	}
+
+	/**
+	 * モジュールのキーの一覧を取得する
+	 */
+	public function get_module_keys(){
+		return array_keys( $this->modules );
+	}
+
+	/**
+	 * モジュール定義を取得する
+	 */
+	public function get_module_definitions(){
+		$rtn = array();
+		$rtn['keys'] = array_keys( $this->modules );
+		$rtn['list'] = $this->modules;
+		return $rtn;
+	}
+
+
 }
 
 ?>

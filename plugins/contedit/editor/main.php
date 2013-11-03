@@ -27,6 +27,7 @@ class pxplugin_contedit_editor_main{
 		switch( $this->px->req()->get_param('mode') ){
 			case 'canvas': return $this->page_canvas(); break;
 			case 'resources': return $this->page_resources(); break;
+			case 'api': return $this->page_api(); break;
 			default: break;
 		}
 		return $this->page_home();
@@ -45,6 +46,7 @@ class pxplugin_contedit_editor_main{
 <meta charset="UTF-8" />
 <title>contedit - Pickles Framework</title>
 <script type="text/javascript"><?php print $this->create_src_jquery(); ?></script>
+<script type="text/javascript" src="?PX=plugins.contedit.edit&amp;mode=resources&amp;path_resource=js/main.js"></script>
 <script type="text/javascript">
 (function(){
 	function fitCanvas(){
@@ -128,7 +130,7 @@ body{
 		<a href="<?php print t::h($this->plugin_obj->href( ':' )); ?>" target="_top" class="conteditUI-btn_ok" onclick="alert('開発中です。');return true;">保存</a>
 	</div>
 </div>
-<div class="conteditUI conteditUI-canvas"><iframe src="<?php print t::h( $this->href('canvas') ); ?>" class="conteditUI-canvas_iframe"></iframe></div>
+<div class="conteditUI conteditUI-canvas"><iframe src="<?php print t::h( $this->href('canvas') ); ?>" class="conteditUI-canvas_iframe" name="conteditUICanvas"></iframe></div>
 </body>
 </html>
 <?php
@@ -148,8 +150,10 @@ body{
 		header('Content-type: text/html');
 		$src = '';
 		ob_start(); ?>
-<script type="text/javascript" src="?PX=plugins.contedit.edit&amp;mode=resources&amp;path_resource=js/main.js"></script>
 <p>編集画面をロードしています。しばらくお待ち下さい。</p>
+<script type="text/javascript">
+window.onload = function(){ window.parent.contMain.standby('canvas'); }
+</script>
 <?php
 		$src .= ob_get_clean();
 
@@ -194,6 +198,36 @@ body{
 		}
 		$bin = file_get_contents($realpath_resource);
 		print $bin;
+		exit;
+	}
+
+	/**
+	 * API
+	 */
+	private function page_api(){
+		$rtn = array();
+		switch( $this->px->req()->get_param('method') ){
+			case 'get_module_definitions':
+				$obj_modules = $this->plugin_obj->factory_model_modules();
+				$rtn = $obj_modules->get_module_definitions();
+				break;
+			case 'get_module_keys':
+				$obj_modules = $this->plugin_obj->factory_model_modules();
+				$rtn = $obj_modules->get_module_keys();
+				break;
+			case 'get_module_list':
+				$obj_modules = $this->plugin_obj->factory_model_modules();
+				$rtn = $obj_modules->get_module_list();
+				break;
+			default:
+				$rtn = array(
+					'error'=>'Unknown method.',
+				);
+				break;
+		}
+
+		header('Content-type: text/json');
+		print json_encode( $rtn );
 		exit;
 	}
 
