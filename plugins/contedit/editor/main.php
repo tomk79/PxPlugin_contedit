@@ -26,6 +26,7 @@ class pxplugin_contedit_editor_main{
 	public function execute(){
 		switch( $this->px->req()->get_param('mode') ){
 			case 'canvas': return $this->page_canvas(); break;
+			case 'resources': return $this->page_resources(); break;
 			default: break;
 		}
 		return $this->page_home();
@@ -137,7 +138,7 @@ body{
 	}
 
 	/**
-	 * ホーム画面
+	 * 編集画面
 	 */
 	private function page_canvas(){
 		$theme_obj = $this->plugin_obj->factory_model_theme( $this->page_info );
@@ -147,9 +148,8 @@ body{
 		header('Content-type: text/html');
 		$src = '';
 		ob_start(); ?>
-<p>ダミーコンテンツ。テキストテキスト。ダミーコンテンツ。テキストテキスト。ダミーコンテンツ。テキストテキスト。ダミーコンテンツ。テキストテキスト。</p>
-<p>ダミーコンテンツ。テキストテキスト。ダミーコンテンツ。テキストテキスト。ダミーコンテンツ。テキストテキスト。ダミーコンテンツ。テキストテキスト。</p>
-<p>ダミーコンテンツ。テキストテキスト。ダミーコンテンツ。テキストテキスト。ダミーコンテンツ。テキストテキスト。ダミーコンテンツ。テキストテキスト。</p>
+<script type="text/javascript" src="?PX=plugins.contedit.edit&amp;mode=resources&amp;path_resource=js/main.js"></script>
+<p>編集画面をロードしています。しばらくお待ち下さい。</p>
 <?php
 		$src .= ob_get_clean();
 
@@ -161,6 +161,39 @@ body{
 			//        この $obj_target_theme->px->theme() は、$this->px->theme() と同じインスタンス。
 
 		print $src;
+		exit;
+	}
+
+	/**
+	 * リソース
+	 */
+	private function page_resources(){
+		header('Content-type: text/html'); //デフォルト
+
+		$path_resource = $this->px->req()->get_param('path_resource');
+		$path_resource = preg_replace('/\.+/', '.', $path_resource);
+		$realpath_resource = $this->px->get_conf('paths.px_dir').'plugins/contedit/data/resources/'.$path_resource;
+
+		if( !is_file($realpath_resource) ){
+			$this->px->page_notfound();
+			exit;
+		}
+
+		$ext = strtolower( $this->px->dbh()->get_extension( $realpath_resource ) );
+		switch( $ext ){
+			case 'js':
+				header('Content-type: text/javascript'); break;
+			case 'css':
+				header('Content-type: text/css'); break;
+			case 'gif':
+				header('Content-type: image/gif'); break;
+			case 'jpg': case 'jpe': case 'jpeg':
+				header('Content-type: image/jpeg'); break;
+			case 'png':
+				header('Content-type: image/png'); break;
+		}
+		$bin = file_get_contents($realpath_resource);
+		print $bin;
 		exit;
 	}
 
