@@ -39,7 +39,6 @@ class pxplugin_contedit_models_modules{
 
 			$this->modules[$ary['type'].'/'.$ary['id']] = $ary;
 		}
-		// test::var_dump($this->modules);
 		return true;
 	}
 

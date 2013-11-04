@@ -46,7 +46,7 @@ class pxplugin_contedit_editor_main{
 <meta charset="UTF-8" />
 <title>contedit - Pickles Framework</title>
 <script type="text/javascript"><?php print $this->create_src_jquery(); ?></script>
-<script type="text/javascript" src="?PX=plugins.contedit.edit&amp;mode=resources&amp;path_resource=js/main.js"></script>
+<script type="text/javascript" src="?PX=plugins.contedit.edit&amp;mode=resources&amp;path_resource=js/contConteditor.min.js"></script>
 <script type="text/javascript">
 (function(){
 	function fitCanvas(){
@@ -152,7 +152,7 @@ body{
 		ob_start(); ?>
 <p>編集画面をロードしています。しばらくお待ち下さい。</p>
 <script type="text/javascript">
-window.onload = function(){ window.parent.contMain.standby('canvas'); }
+window.onload = function(){ window.parent.contConteditor.standby('canvas'); }
 </script>
 <?php
 		$src .= ob_get_clean();
