@@ -21,8 +21,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   // デフォルトのタスクを指定
-  grunt.registerTask('default', ['uglify']);
-  grunt.registerTask('default', ['watch']);
+  grunt.registerTask('default', ['uglify', 'watch']);
 
   // exec command
   // $ npm install
