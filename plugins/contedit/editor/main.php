@@ -46,6 +46,8 @@ class pxplugin_contedit_editor_main{
 <meta charset="UTF-8" />
 <title>contedit - Pickles Framework</title>
 <script type="text/javascript"><?php print $this->create_src_jquery(); ?></script>
+<script type="text/javascript" src="?PX=plugins.contedit.edit&amp;mode=resources&amp;path_resource=js/underscore-min.js"></script>
+<script type="text/javascript" src="?PX=plugins.contedit.edit&amp;mode=resources&amp;path_resource=js/backbone-min.js"></script>
 <script type="text/javascript" src="?PX=plugins.contedit.edit&amp;mode=resources&amp;path_resource=js/contConteditor.min.js"></script>
 <script type="text/javascript">
 (function(){
