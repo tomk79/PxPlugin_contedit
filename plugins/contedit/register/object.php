@@ -103,6 +103,17 @@ class pxplugin_contedit_register_object{
 	}
 
 	/**
+	 * factory: モジュールパーサー
+	 */
+	public function factory_modParser($modType, $modName){
+		$modType = preg_replace('/[\.\/]/', '', $modType);
+		$modName = preg_replace('/[\.\/]/', '', $modName);
+		$class_name = $this->px->load_px_plugin_class('/contedit/models/modParser.php');
+		$obj = new $class_name();
+		return $obj;
+	}
+
+	/**
 	 * factory: コンテンツモデル
 	 */
 	public function factory_model_content( $page_info ){

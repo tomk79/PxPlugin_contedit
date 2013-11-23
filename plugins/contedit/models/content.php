@@ -21,7 +21,6 @@ class pxplugin_contedit_models_content{
 		$this->plugin_obj = $plugin_obj;
 	}
 
-
 }
 
 ?>

@@ -66,6 +66,17 @@ class pxplugin_contedit_models_modules{
 		return $rtn;
 	}
 
+	/**
+	 * モジュールソースをパースする
+	 */
+	public function parse_module( $modType, $modName ){
+		$mod_parser = $this->plugin_obj->factory_modParser();
+		$rtn = $mod_parser->parse( realpath(dirname(__FILE__).'/../data/modules/src/'.$modType.'/'.$modName.'.html'), 'path' );
+
+		// $rtn = array();
+		return $rtn;
+	}
+
 
 }
 

@@ -159,6 +159,9 @@ window.onload = function(){ window.parent.contConteditor.standby('canvas'); }
 <?php
 		$src .= ob_get_clean();
 
+		$modUnit = $obj_modules->parse_module('units', 'unit');
+test::var_dump($modUnit);
+
 		$this->px->theme()->send_content($src, '');
 		$src = $obj_target_theme->bind_contents( null );
 			// 注意！
