@@ -37,6 +37,7 @@ class pxplugin_contedit_editor_main{
 	 * ホーム画面
 	 */
 	private function page_home(){
+		$obj_modules = $this->plugin_obj->factory_model_modules();
 		header('Content-type: text/html');
 		$src = '';
 		ob_start(); ?>
@@ -59,6 +60,11 @@ class pxplugin_contedit_editor_main{
 			.height( win.height() )
 		;
 	}
+<?php
+		$modList = $obj_modules->get_module_list();
+		print '	var templates = '.json_encode($modList).';';
+?>
+console.log(templates);
 
 	$(window).load( function(){
 		$(window).on('resize', function(){
@@ -68,11 +74,11 @@ class pxplugin_contedit_editor_main{
 		fitCanvas();
 		$('.conteditUI-controlpanel').draggable();
 	} );
-	$(window).unload(function(){
+	$(window).bind('unload', function(){
 		alert(123);
-		// if( !confirm('編集内容は保存されていません。画面を遷移してもよろしいですか？') ){
-		// 	return false;
-		// }
+		if( !confirm('編集内容は保存されていません。画面を遷移してもよろしいですか？') ){
+			return false;
+		}
 		return true;
 	});
 })();
@@ -96,6 +102,7 @@ body{
 	padding:10px;
 	border-radius:10px;
 	overflow:visible;
+	box-shadow: 5px 5px 15px rgba(0,0,0,0.4);
 }
 .conteditUI.conteditUI-controlpanel a{
 	display:inline-block;
@@ -157,13 +164,11 @@ body{
 		ob_start(); ?>
 <p>編集画面をロードしています。しばらくお待ち下さい。</p>
 <script type="text/javascript">
+// フレーム側のスクリプトをキックする
 window.onload = function(){ window.parent.contConteditor.standby('canvas'); }
 </script>
 <?php
 		$src .= ob_get_clean();
-
-		$modUnit = $obj_modules->parse_module('units', 'unit');
-test::var_dump($modUnit);
 
 		$this->px->theme()->send_content($src, '');
 		$src = $obj_target_theme->bind_contents( null );

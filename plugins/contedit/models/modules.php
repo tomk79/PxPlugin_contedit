@@ -26,18 +26,20 @@ class pxplugin_contedit_models_modules{
 	 * モジュール定義を読み込む
 	 */
 	private function load_module_definitions(){
+		$this->modules = array();
 		$csv = $this->px->dbh()->read_csv_utf8( $this->path_mod_dir.'module_list.csv' );
 		foreach( $csv as $row ){
 			$ary = array();
 			$i = 0;
-			$ary['type'] = trim($row[$i++]);
+			$ary['category'] = trim($row[$i++]);
 			$ary['id'] = trim($row[$i++]);
 			$ary['path_template'] = trim($row[$i++]);
 			$ary['name'] = trim($row[$i++]);
-			$ary['template'] = file_get_contents( $this->path_mod_dir.'src/'.$ary['path_template'] );
+			$ary['template_src'] = file_get_contents( $this->path_mod_dir.'src/'.$ary['path_template'] );
+			$ary['template'] = $this->parse_module( $ary['template_src'] );
 			$ary['thumb'] = null; // ← UTODO: 検討中
 
-			$this->modules[$ary['type'].'/'.$ary['id']] = $ary;
+			array_push( $this->modules, $ary );
 		}
 		return true;
 	}
@@ -69,14 +71,13 @@ class pxplugin_contedit_models_modules{
 	/**
 	 * モジュールソースをパースする
 	 */
-	public function parse_module( $modType, $modName ){
+	public function parse_module( $bin ){
 		$mod_parser = $this->plugin_obj->factory_modParser();
-		$rtn = $mod_parser->parse( realpath(dirname(__FILE__).'/../data/modules/src/'.$modType.'/'.$modName.'.html'), 'path' );
+		$rtn = $mod_parser->parse( $bin, 'bin' );
 
 		// $rtn = array();
 		return $rtn;
 	}
-
 
 }
 

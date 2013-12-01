@@ -9,7 +9,7 @@
 			children: []
 		},
 		initialize: function(){
-			alert('init model contModule');
+			console.log('init model contModule');
 			console.log(this.toJSON().data);
 		}
 	});
@@ -17,7 +17,7 @@
 		tagName: 'div',
 		template: _.template('<div><%- data %></div>') ,
 		initialize: function(){
-			alert('init view contModView');
+			console.log('init view contModView');
 		} ,
 		render: function(){
 			var tpl = this.template( this.model.toJSON() );

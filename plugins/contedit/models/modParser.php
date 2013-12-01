@@ -28,14 +28,26 @@ class pxplugin_contedit_models_modParser{
 		$rtn = array();
 
 		while(1){
-			if( !preg_match('/^(.*?)\{\$(.+?)\}(.*)$/s', $bin, $matched) ){
-				array_push( $rtn, $this->create_text_node( $bin ) );
+			if( !preg_match('/^(.*?)\{([a-zA-Z0-9]+?)(?:\s+(.+?))?\}(.*)$/s', $bin, $matched) ){
+				if( strlen($bin) ){
+					array_push( $rtn, $this->create_text_node( $bin ) );
+				}
 				break;
 			}
+			$elm = array();
+			$idx = 1;
+			$elm['before']     = $matched[$idx++];
+			$elm['function']   = trim($matched[$idx++]);
+			$elm['attributes'] = trim($matched[$idx++]);
+			$elm['after']      = $matched[$idx++];
 
-			array_push( $rtn, $this->create_text_node( $matched[1] ) );
-			array_push( $rtn, $this->create_template_node( $matched[2], $matched[3] ) );
-			$bin = $matched[3];
+			if( strlen($elm['before']) ){
+				array_push( $rtn, $this->create_text_node( $elm['before'] ) );
+			}
+			$children = $this->search_close_tag($elm['after'], $elm['function']);
+			$bin = $children['after'];
+
+			array_push( $rtn, $this->create_template_node( $elm['function'], $elm['attributes'], $children['inner'] ) );
 			continue;
 		}
 
@@ -55,13 +67,57 @@ class pxplugin_contedit_models_modParser{
 	/**
 	 * テンプレートノードを作成する
 	 */
-	private function create_template_node($src, $src_after){
+	private function create_template_node($method, $attr, $bin_inner){
 		$rtn = array();
-		$rtn['type']     = 'template';
-		$rtn['content']  = $src;
-		$rtn['children'] = array();// UTODO: 入れ子を想定して器だけつくった
+		$rtn['type']     = 'function';
+		$rtn['function'] = $method;
+		$rtn['attr']     = $attr;
+		$rtn['children'] = $this->parse($bin_inner);
 		return $rtn;
 	}// create_text_node()
+
+	/**
+	 * 閉じタグを探す
+	 */
+	private function search_close_tag( $bin, $function_name ){
+		// UTODO: 入れ子が1階層までしか処理できていない。深さの計算処理を追加する。
+
+		$before = '';
+		while(1){
+			if( !preg_match('/^(.*?)\{(\/)('.preg_quote($function_name, '/').')(?:\s+(.+?))?\}(.*)$/s', $bin, $matched) ){
+				$before .= $bin;
+				$bin = '';
+				break;
+			}
+			$elm = array();
+			$idx = 1;
+			$elm['before']     = $matched[$idx++];
+			$elm['close_tag']  = trim($matched[$idx++]);
+			$elm['function']   = trim($matched[$idx++]);
+			$elm['attributes'] = trim($matched[$idx++]);
+			$elm['after']      = $matched[$idx++];
+
+			$before .= $elm['before'];
+			$bin = $elm['after'];
+			if( strlen($elm['close_tag']) ){
+				// 閉じタグを発見した。
+				break;
+			}else{
+				$before .= '{'.$elm['function'].' '.$elm['attributes'].'}';
+			}
+			continue;
+		}
+
+		$rtn = array();
+		if( strlen($before) && strlen($bin) ){
+			$rtn['inner'] = $before;
+			$rtn['after'] = $bin;
+		}else{
+			$rtn['inner'] = '';
+			$rtn['after'] = $before;
+		}
+		return $rtn;
+	}
 
 }
 
