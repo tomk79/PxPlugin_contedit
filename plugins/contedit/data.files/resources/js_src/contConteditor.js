@@ -1,7 +1,7 @@
 /**
  * contConteditor
  */
-var contConteditor = new (function(){
+window.contConteditor = new (function(){
 	var _this = this;
 	var _loadingStatus = {
 		'canvas': false,
@@ -74,51 +74,19 @@ var contConteditor = new (function(){
 			this.onsubmit = 'alert(\'編集中のため送信できません。\'); return false;'
 		});
 
-console.log('--- editorOnLoad()');
-console.log(_moduleDefinitions);
-console.log(_contentData);
+		// console.log('--- editorOnLoad()');
+		// console.log(_moduleDefinitions);
+		// console.log(_contentData);
 
-/*
-var tasks = new Tasks([
-    {
-        title: 'task1',
-        completed: true
-    },
-    {
-        title: 'task2'
-    },
-    {
-        title: 'task3'
-    }
-]);
-var tasksView = new TasksView({collection: tasks});
-$('#content', _winIframe.document).html(tasksView.render().el);
-*/
 
 		var docModules = new _this.cls.collections.documentModules([]);
 		var docModulesView = new _this.cls.views.documentModules({collection: docModules});
 
 		for( var i in _moduleDefinitions.list ){
-			docModules.add( new _this.cls.models.documentModule({
-				key: _moduleDefinitions.list[i].category+'/'+_moduleDefinitions.list[i].id,
-				category: _moduleDefinitions.list[i].category,
-				id: _moduleDefinitions.list[i].id,
-				name: _moduleDefinitions.list[i].name,
-				template: _moduleDefinitions.list[i].template
-			}) );
+			docModules.add( new _this.cls.models.documentModule(_moduleDefinitions.list[i]) );
 		}
 
 		$('#content', _winIframe.document).html( docModulesView.render().el );
-
-// 		_rootNode = new this.cls.models.documentModule({
-// 			data: {},
-// 			modKey: null,
-// 			jqElmCanvas: _elmContent
-// 		});
-// 		var view = new contModView({model: _rootNode});
-
-// console.log(_rootNode.toJSON());
-// console.log(view.render().el);
 
 	}//editorOnLoad()
 
