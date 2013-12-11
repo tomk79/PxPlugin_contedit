@@ -3,7 +3,7 @@
 /**
  * contedit modParser
  */
-class pxplugin_contedit_models_modParser{
+class pxplugin_contedit_funcs_modParser{
 
 	/**
 	 * コンストラクタ

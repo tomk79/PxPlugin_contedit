@@ -17,7 +17,7 @@ class pxplugin_contedit_models_modules{
 	public function __construct( $px, $plugin_obj ){
 		$this->px = $px;
 		$this->plugin_obj = $plugin_obj;
-		$this->path_mod_dir = $this->px->get_conf('paths.px_dir').'plugins/contedit/data/modules/';
+		$this->path_mod_dir = $this->px->get_conf('paths.px_dir').'plugins/contedit/data.files/modules/';
 
 		$this->load_module_definitions();
 	}
@@ -63,7 +63,10 @@ class pxplugin_contedit_models_modules{
 	 */
 	public function get_module_definitions(){
 		$rtn = array();
-		$rtn['keys'] = array_keys( $this->modules );
+		$rtn['keys'] = array();
+		foreach( $this->modules as $i=>$row ){
+			$rtn['keys'][$row['category'].'/'.$row['id']] = $i;
+		}
 		$rtn['list'] = $this->modules;
 		return $rtn;
 	}

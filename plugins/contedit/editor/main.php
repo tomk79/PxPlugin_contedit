@@ -60,12 +60,6 @@ class pxplugin_contedit_editor_main{
 			.height( win.height() )
 		;
 	}
-<?php
-		$modList = $obj_modules->get_module_list();
-		print '	var templates = '.json_encode($modList).';';
-?>
-console.log(templates);
-
 	$(window).load( function(){
 		$(window).on('resize', function(){
 			fitCanvas();
@@ -75,7 +69,6 @@ console.log(templates);
 		$('.conteditUI-controlpanel').draggable();
 	} );
 	$(window).bind('unload', function(){
-		alert(123);
 		if( !confirm('編集内容は保存されていません。画面を遷移してもよろしいですか？') ){
 			return false;
 		}
@@ -189,7 +182,7 @@ window.onload = function(){ window.parent.contConteditor.standby('canvas'); }
 
 		$path_resource = $this->px->req()->get_param('path_resource');
 		$path_resource = preg_replace('/\.+/', '.', $path_resource);
-		$realpath_resource = $this->px->get_conf('paths.px_dir').'plugins/contedit/data/resources/'.$path_resource;
+		$realpath_resource = $this->px->get_conf('paths.px_dir').'plugins/contedit/data.files/resources/'.$path_resource;
 
 		if( !is_file($realpath_resource) ){
 			$this->px->page_notfound();
@@ -231,6 +224,10 @@ window.onload = function(){ window.parent.contConteditor.standby('canvas'); }
 			case 'get_module_list':
 				$obj_modules = $this->plugin_obj->factory_model_modules();
 				$rtn = $obj_modules->get_module_list();
+				break;
+			case 'get_content_data':
+				// UTODO: 保存されたコンテンツデータ(ユーザーが編集したデータ)を返す。
+				$rtn = array();
 				break;
 			default:
 				$rtn = array(

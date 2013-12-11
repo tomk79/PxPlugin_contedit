@@ -4,8 +4,11 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
       build: {
-        src: 'plugins/contedit/data/resources/js_src/*.js',
-        dest: 'plugins/contedit/data/resources/js/contConteditor.min.js'
+        src: [
+          'plugins/contedit/data.files/resources/js_src/contConteditor.js',
+          'plugins/contedit/data.files/resources/js_src/*.js'
+        ],
+        dest: 'plugins/contedit/data.files/resources/js/contConteditor.min.js'
       }
     },
     watch: {
@@ -21,7 +24,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   // デフォルトのタスクを指定
-  grunt.registerTask('default', ['uglify', 'watch']);
+  grunt.registerTask('default', ['watch']);
 
   // exec command
   // $ npm install

@@ -103,17 +103,6 @@ class pxplugin_contedit_register_object{
 	}
 
 	/**
-	 * factory: モジュールパーサー
-	 */
-	public function factory_modParser($modType, $modName){
-		$modType = preg_replace('/[\.\/]/', '', $modType);
-		$modName = preg_replace('/[\.\/]/', '', $modName);
-		$class_name = $this->px->load_px_plugin_class('/contedit/models/modParser.php');
-		$obj = new $class_name();
-		return $obj;
-	}
-
-	/**
 	 * factory: コンテンツモデル
 	 */
 	public function factory_model_content( $page_info ){
@@ -128,6 +117,15 @@ class pxplugin_contedit_register_object{
 	public function factory_model_theme( $page_info ){
 		$class_name = $this->px->load_px_plugin_class('/contedit/models/theme.php');
 		$obj = new $class_name( $this->px, $page_info, $this );
+		return $obj;
+	}
+
+	/**
+	 * factory: モジュールパーサー
+	 */
+	public function factory_modParser(){
+		$class_name = $this->px->load_px_plugin_class('/contedit/funcs/modParser.php');
+		$obj = new $class_name();
 		return $obj;
 	}
 
