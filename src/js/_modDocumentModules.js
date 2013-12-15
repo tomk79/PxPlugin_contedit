@@ -1,5 +1,5 @@
 /**
- * モデル定義
+ * ドキュメントモジュール モデル定義
  */
 (function(contConteditor){
 
@@ -85,4 +85,4 @@
 	});
 
 
-})(contConteditor);
+})(window.contConteditor);

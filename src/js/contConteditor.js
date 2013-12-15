@@ -6,7 +6,7 @@ window.contConteditor = new (function(){
 	var _loadingStatus = {
 		'canvas': false,
 		'module_definitions': false,
-		'content_data': false
+		'document_contents': false
 	};
 	var _moduleDefinitions = {}; // モジュール定義
 	var _contentData = []; // コンテンツデータ
@@ -51,7 +51,7 @@ window.contConteditor = new (function(){
 		});
 	}
 	loadServerData({apiMethod:'get_module_definitions', standbyKey:'module_definitions', success: function(data){_moduleDefinitions = data;}});
-	loadServerData({apiMethod:'get_content_data', standbyKey:'content_data', success: function(data){_contentData = data;}});
+	loadServerData({apiMethod:'get_document_contents', standbyKey:'document_contents', success: function(data){_contentData = data;}});
 
 
 	/**
@@ -74,27 +74,34 @@ window.contConteditor = new (function(){
 			this.onsubmit = 'alert(\'編集中のため送信できません。\'); return false;'
 		});
 
-		// console.log('--- editorOnLoad()');
-		// console.log(_moduleDefinitions);
-		// console.log(_contentData);
-
-
+		// document module collection を、一旦空白で作成する。
 		var docModules = new _this.cls.collections.documentModules([]);
 		var docModulesView = new _this.cls.views.documentModules({collection: docModules});
 
+		// document module collection にモジュールを追加する。
 		for( var i in _moduleDefinitions.list ){
 			docModules.add( new _this.cls.models.documentModule(_moduleDefinitions.list[i]) );
 		}
 
-		$('#content', _winIframe.document).html( docModulesView.render().el );
+		// document contents collection を、一旦空白で作成する。
+		var docContents = new _this.cls.collections.documentContents([]);
+		var docContentsView = new _this.cls.views.documentContents({collection: docContents});
+
+		// document contents collection にコンテンツを追加する。
+		for( var i in _contentData ){
+			docContents.add( new _this.cls.models.documentContent(_contentData[i]) );
+		}
+
+		// 編集画面を描画する
+		$('#content', _winIframe.document).html( docContentsView.render().el );
 
 	}//editorOnLoad()
 
 	/**
-	 * モジュール定義の一式を得る
+	 * ドキュメントモジュール定義の一式を得る
 	 */
 	this.getModuleDefinitions = function(){
 		return _moduleDefinitions;
-	}
+	}//getModuleDefinitions()
 
 })();

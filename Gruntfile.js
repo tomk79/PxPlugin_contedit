@@ -5,10 +5,10 @@ module.exports = function(grunt) {
     uglify: {
       build: {
         src: [
-          'plugins/contedit/data.files/resources/js_src/contConteditor.js',
-          'plugins/contedit/data.files/resources/js_src/*.js'
+          'src/js/contConteditor.js',
+          'src/js/*.js'
         ],
-        dest: 'plugins/contedit/data.files/resources/js/contConteditor.min.js'
+        dest: 'plugins/contedit/plugin.files/resources/js/contConteditor.min.js'
       }
     },
     watch: {
