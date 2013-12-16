@@ -15,7 +15,7 @@
 		},
 		initialize: function(){
 			// console.log('--- init model documentModule ---');
-			this.set('key', this.category+'/'+this.id);
+			this.set('key', this.get('category')+'/'+this.get('id'));
 			// console.log(this.toJSON());
 		}
 	});
@@ -67,21 +67,32 @@
 	 * ドキュメントモジュール: コレクションビュー
 	 */
 	contConteditor.cls.views.documentModules = Backbone.View.extend({
-		tagName: 'ul',
+		tagName: 'select',
 		initialize: function() {
 			// this.collection.on('add', this.addNew, this);
-		},
-		addNew: function(docMod) {
-			// var docModView = new contConteditor.cls.views.documentModule({model: docMod});
-			// this.$el.append(docModView.render().el);
-		},
+		} ,
+		// addNew: function(docMod) {
+		// 	var docModView = new contConteditor.cls.views.documentModule({model: docMod});
+		// 	this.$el.append(docModView.render().el);
+		// } ,
 		render: function() {
 			this.collection.each(function(docMod) {
 				var docModView = new contConteditor.cls.views.documentModule({model: docMod});
 				this.$el.append(docModView.render().el);
 			}, this);
 			return this;
+		} ,
+		mk_modSelectOptions: function() {
+			// オプション選択要のプルダウンを作成
+			var rtn = '';
+			this.collection.each(function(docMod) {
+				rtn += '<option value="'+docMod.get('key')+'">';
+				rtn += docMod.get('name');
+				rtn += '</option>';
+			}, this);
+			return rtn;
 		}
+
 	});
 
 

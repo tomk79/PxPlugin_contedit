@@ -86,7 +86,7 @@
 			}, this);
 			this.$el.append(
 				  '<div class="cont_form_addElement">'
-				+ '<select name="cont_form_addElement_modId"></select>'
+				+ '<select name="cont_form_addElement_modId"><option name="">選択してください</option>'+contConteditor.docModulesView.mk_modSelectOptions()+'</select>'
 				+ '<button href="javascript:;" class="cont_addNew">要素を増やす</button>'
 				+ '</div>'
 			);
