@@ -1,5 +1,61 @@
-.cont_test{
-	.cont_test-test{
-		color:red;
+body{
+	margin:0; padding:0;
+}
+.conteditUI{
+	font-size:small;
+	color:#fff;
+
+	*{
+		color:#fff;
+		margin:0;
+		padding:0;
+		list-style-type:none;
+	}
+
+	&.conteditUI-controlpanel{
+		display:block;
+		position:fixed;
+		top:40%; left:4%;
+		background-color:#000; color:#fff;
+		padding:10px;
+		border-radius:10px;
+		overflow:visible;
+		box-shadow: 5px 5px 15px rgba(0,0,0,0.4);
+
+		a{
+			display:inline-block;
+			background-color:#eee;
+			padding:0.3em 1em;
+			border-radius:0.3em;
+			color:#000;
+		}
+
+		.conteditUI-btn_ok{
+			text-align:center;
+			width:100px;
+			font-weight:bold;
+		}
+
+		.conteditUI-btn_cancel{
+			text-align:center;
+			width:80px;
+		}
+
+		.conteditUI-title{
+			font-weight:bold;
+		}
+	}
+
+	&.conteditUI-canvas{
+		width:auto;
+		overflow:hidden;
+
+		.conteditUI-canvas_iframe{
+			width:100%; height:100%;
+			border:0 none;
+			padding:0; margin:0;
+		}
 	}
 }
+
+

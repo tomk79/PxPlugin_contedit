@@ -59,7 +59,7 @@ window.contConteditor = new (function(){
 
 
 	/**
-	 * すべての要素のロードが完了したら。
+	 * すべての要素のロードが完了したら呼ばれる
 	 */
 	function editorOnLoad(){
 		_winIframe = window.conteditUICanvas;
@@ -107,5 +107,30 @@ window.contConteditor = new (function(){
 	this.getModuleDefinitions = function(){
 		return _moduleDefinitions;
 	}//getModuleDefinitions()
+
+	/**
+	 * 編集を保存する
+	 */
+	this.save = function(gotoUrlWhenSuccess){
+		var json = _this.docContents.toJSON();
+		// console.log(json);//preview
+
+		$.ajax({
+			url: '?PX=plugins.contedit.edit&mode=api&method=save' ,
+			data: {
+				document_contents: json
+			},
+			success: function(data){
+				if(!data.result){
+					alert('ERROR: ' + data.error);
+					return;
+				}
+				window.location.href = gotoUrlWhenSuccess;
+			},
+			error: function(){
+				alert(opt.apiMethod + ' ERROR.');
+			}
+		});
+	}
 
 })();

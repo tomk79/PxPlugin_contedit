@@ -103,7 +103,7 @@ class pxplugin_contedit_register_object{
 	}
 
 	/**
-	 * factory: コンテンツモデル
+	 * factory: コンテンツデータモデル
 	 */
 	public function factory_model_content( $page_info ){
 		$class_name = $this->px->load_px_plugin_class('/contedit/models/content.php');
