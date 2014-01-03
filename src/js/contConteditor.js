@@ -55,7 +55,7 @@ window.contConteditor = new (function(){
 		});
 	}
 	loadServerData({apiMethod:'get_module_definitions', standbyKey:'module_definitions', success: function(data){_moduleDefinitions = data;}});
-	loadServerData({apiMethod:'get_document_contents', standbyKey:'document_contents', success: function(data){_contentData = data;}});
+	loadServerData({apiMethod:'get_document_contents', standbyKey:'document_contents', success: function(data){_contentData = data.data;}});
 
 
 	/**
@@ -79,22 +79,22 @@ window.contConteditor = new (function(){
 		});
 
 		// document module collection を、一旦空白で作成する。
-		_this.docModules = new _this.cls.collections.documentModules([]);
+		_this.docModules = new _this.cls.collections.documentModules(_moduleDefinitions.list);
 		_this.docModulesView = new _this.cls.views.documentModules({collection: _this.docModules});
 
 		// document module collection にモジュールを追加する。
-		for( var i in _moduleDefinitions.list ){
-			_this.docModules.add( new _this.cls.models.documentModule(_moduleDefinitions.list[i]) );
-		}
+		// for( var i in _moduleDefinitions.list ){
+		// 	_this.docModules.add( new _this.cls.models.documentModule(_moduleDefinitions.list[i]) );
+		// }
 
 		// document contents collection を、一旦空白で作成する。
-		_this.docContents = new _this.cls.collections.documentContents([]);
+		_this.docContents = new _this.cls.collections.documentContents(_contentData);
 		_this.docContentsView = new _this.cls.views.documentContents({collection: _this.docContents});
 
 		// document contents collection にコンテンツを追加する。
-		for( var i in _contentData ){
-			_this.docContents.add( new _this.cls.models.documentContent(_contentData[i]) );
-		}
+		// for( var i in _contentData ){
+		// 	_this.docContents.add( new _this.cls.models.documentContent(_contentData[i]) );
+		// }
 
 		// 編集画面を描画する
 		$('#content', _winIframe.document).html( _this.docContentsView.render().el );

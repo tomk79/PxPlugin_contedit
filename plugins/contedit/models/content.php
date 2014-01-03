@@ -21,9 +21,10 @@ class pxplugin_contedit_models_content{
 		$this->px = $px;
 		$this->page_info = $page_info;
 		$this->plugin_obj = $plugin_obj;
-		$this->data = $this->load_contents_data();
 
 		$this->cont_info = $this->parse_content_info($this->page_info);
+
+		$this->data = $this->load_contents_data();
 	}
 
 	/**
@@ -49,6 +50,8 @@ class pxplugin_contedit_models_content{
 		$rtn['realpath_files_dir'] = t::trimext( $rtn['realpath_content'] ).'.files/';
 		$rtn['path_content_dir'] = dirname($rtn['path_content']).'/';
 		$rtn['realpath_content_dir'] = dirname($rtn['realpath_content']).'/';
+		$rtn['path_contedit_src_dir'] = $rtn['path_files_dir'].'contedit.src.nopublish/';
+		$rtn['realpath_contedit_src_dir'] = $rtn['realpath_files_dir'].'contedit.src.nopublish/';
 		return $rtn;
 	}
 
@@ -56,8 +59,19 @@ class pxplugin_contedit_models_content{
 	 * コンテンツのデータをロードする。
 	 */
 	private function load_contents_data(){
-		// UTODO: 実装してください。
+		if( !$this->validate_pageinfo($this->page_info) ){
+			return false;
+		}
+
+		$cont_info = $this->cont_info;
+
 		$rtn = array();
+
+		// ファイルとして保存する。
+		if( $this->px->dbh()->is_file( $cont_info['realpath_contedit_src_dir'].'content_src.json' ) ){
+			$rtn = $this->px->dbh()->file_get_contents( $cont_info['realpath_contedit_src_dir'].'content_src.json' );
+			$rtn = json_decode( $rtn );
+		}
 		return $rtn;
 	}//load_contents_data()
 
@@ -80,14 +94,31 @@ class pxplugin_contedit_models_content{
 	 * 編集したデータを保存する。
 	 */
 	public function save(){
-		// UTODO: 実装してください。
 		if( !$this->validate_pageinfo($this->page_info) ){
 			return false;
 		}
 
 		$cont_info = $this->cont_info;
-		// test::var_dump($cont_info);
+		if( !$this->px->dbh()->is_dir( $cont_info['realpath_content_dir'] ) ){
+			if( !$this->px->dbh()->mkdir_all( $cont_info['realpath_content_dir'] ) ){
+				return false;
+			}
+		}
+		if( !$this->px->dbh()->is_dir( $cont_info['realpath_files_dir'] ) ){
+			if( !$this->px->dbh()->mkdir( $cont_info['realpath_files_dir'] ) ){
+				return false;
+			}
+		}
+		if( !$this->px->dbh()->is_dir( $cont_info['realpath_contedit_src_dir'] ) ){
+			if( !$this->px->dbh()->mkdir( $cont_info['realpath_contedit_src_dir'] ) ){
+				return false;
+			}
+		}
 
+		// ファイルとして保存する。
+		if( !$this->px->dbh()->file_overwrite( $cont_info['realpath_contedit_src_dir'].'content_src.json', json_encode( $this->data ) ) ){
+			return false;
+		}
 		return true;
 	}//save()
 

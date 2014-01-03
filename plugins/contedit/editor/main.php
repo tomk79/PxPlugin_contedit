@@ -181,10 +181,10 @@ window.onload = function(){ window.parent.contConteditor.standby('canvas'); }
 				break;
 			case 'get_document_contents':
 				// UTODO: 保存されたコンテンツデータ(ユーザーが編集したデータ)を返す。
-				$obj_modules = $this->plugin_obj->factory_model_content( $this->page_info );
+				$obj_content = $this->plugin_obj->factory_model_content( $this->page_info );
 				$rtn = array();
 				$rtn['result'] = 1;
-				$rtn['data'] = $obj_modules->get();
+				$rtn['data'] = $obj_content->get();
 				break;
 			case 'save':
 				// UTODO: conteditUIが編集した結果を受け取って保存する
@@ -193,14 +193,14 @@ window.onload = function(){ window.parent.contConteditor.standby('canvas'); }
 				// var_dump($this->px->req()->get_param('document_contents'));
 				// $test = ob_get_clean();
 
-				$obj_modules = $this->plugin_obj->factory_model_content( $this->page_info );
-				if( !$obj_modules->set( $this->px->req()->get_param('document_contents') ) ){
+				$obj_content = $this->plugin_obj->factory_model_content( $this->page_info );
+				if( !$obj_content->set( $this->px->req()->get_param('document_contents') ) ){
 					$rtn = array();
 					$rtn['result'] = 0;
 					$rtn['error'] = 'データ形式にエラーがあります。';
 					break;
 				}
-				if( !$obj_modules->save() ){
+				if( !$obj_content->save() ){
 					$rtn = array();
 					$rtn['result'] = 0;
 					$rtn['error'] = 'データの保存に失敗しました。';

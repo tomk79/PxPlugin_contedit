@@ -23,7 +23,7 @@
 	 */
 	contConteditor.cls.collections.documentContents = Backbone.Collection.extend({
 		initialize: function(){
-			console.log('-- document contents collection standby.');
+			// console.log('-- document contents collection standby.');
 		},
 		model: contConteditor.cls.models.documentContent
 	});
@@ -53,7 +53,7 @@
 		},
 		template: _.template(
 			  '<div>'
-			+ 'TEST: <%- name %>'
+			+ 'TEST: <%- name %>: <%- key %>'
 			+ '<button class="cont_docCont_delete">delete</button>'
 			+ '</div>'
 		),
