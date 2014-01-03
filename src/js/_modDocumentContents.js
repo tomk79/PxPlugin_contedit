@@ -8,9 +8,8 @@
 	 */
 	contConteditor.cls.models.documentContent = Backbone.Model.extend({
 		defaults:{
-			key: null,
-			category: null,
-			id: null,
+			// id: null,
+			module_key:null,
 			name: 'unknown'
 		},
 		initialize: function(){
@@ -53,7 +52,7 @@
 		},
 		template: _.template(
 			  '<div>'
-			+ 'TEST: <%- name %>: <%- key %>'
+			+ 'TEST: <%- name %>: <%- module_key %>'
 			+ '<button class="cont_docCont_delete">delete</button>'
 			+ '</div>'
 		),
@@ -99,7 +98,9 @@
 		},
 		addNewtest: function(){
 			// alert('増やします。');
-			this.collection.add({});
+			var val = {};
+			val.module_key = $('.cont_form_addElement select', contConteditor.winIframe.document).val();
+			this.collection.add(val);
 		}
 
 	});

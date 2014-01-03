@@ -10,10 +10,10 @@ window.contConteditor = new (function(){
 	};
 	var _moduleDefinitions = {}; // モジュール定義
 	var _contentData = []; // コンテンツデータ
-	var _winIframe = null;
 	var _elmContent = null;
 	var _rootNode = null;
-	this.cls = {
+	_this.winIframe = null;//iframeウィンドウオブジェクト
+	_this.cls = {
 		collections: {},//コレクションを格納
 		models: {},//モデルを格納
 		views: {}//ビューを格納
@@ -62,18 +62,18 @@ window.contConteditor = new (function(){
 	 * すべての要素のロードが完了したら呼ばれる
 	 */
 	function editorOnLoad(){
-		_winIframe = window.conteditUICanvas;
+		_this.winIframe = window.conteditUICanvas;
 
 		// コンテンツ編集画面を開発中表示に切り替える。
-		_elmContent = $('#content', _winIframe.document);
+		_elmContent = $('#content', _this.winIframe.document);
 		_elmContent.html('<p>開発中です。</p>');
 
 		// 遷移する処理を無効化
-		$('a', _winIframe.document).each(function(){
+		$('a', _this.winIframe.document).each(function(){
 			this.href = 'javascript:alert(\'編集中のため押せません。\');'
 			this.onclick = 'alert(\'編集中のため押せません。\'); return false;'
 		});
-		$('form', _winIframe.document).each(function(){
+		$('form', _this.winIframe.document).each(function(){
 			this.action = 'javascript:alert(\'編集中のため送信できません。\');'
 			this.onsubmit = 'alert(\'編集中のため送信できません。\'); return false;'
 		});
@@ -97,7 +97,7 @@ window.contConteditor = new (function(){
 		// }
 
 		// 編集画面を描画する
-		$('#content', _winIframe.document).html( _this.docContentsView.render().el );
+		$('#content', _this.winIframe.document).html( _this.docContentsView.render().el );
 
 	}//editorOnLoad()
 
