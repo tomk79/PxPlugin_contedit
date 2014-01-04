@@ -8,12 +8,11 @@
 	 */
 	contConteditor.cls.models.documentContent = Backbone.Model.extend({
 		defaults:{
-			// id: null,
-			module_key:null,
+			module_id: null,
 			name: 'unknown'
 		},
 		initialize: function(){
-			this.set('key', this.category+'/'+this.id);
+			// this.set('key', this.get('category')+'/'+this.get('id'));
 		}
 	});
 
@@ -52,7 +51,7 @@
 		},
 		template: _.template(
 			  '<div>'
-			+ 'TEST: <%- name %>: <%- module_key %>'
+			+ 'TEST: <%- name %>: <%- module_id %>'
 			+ '<button class="cont_docCont_delete">delete</button>'
 			+ '</div>'
 		),
@@ -83,25 +82,24 @@
 				var docModView = new contConteditor.cls.views.documentContent( {model: docMod} );
 				this.$el.append( docModView.render().el );
 			}, this);
-			this.$el.append(
-				  '<div class="cont_form_addElement">'
-				+ '<select name="cont_form_addElement_modId"><option name="">選択してください</option>'+contConteditor.docModulesView.mk_modSelectOptions()+'</select>'
-				+ '<button href="javascript:;" class="cont_addNew">要素を増やす</button>'
-				+ '</div>'
-			);
 			return this;
 		} ,
 
 		events: {
 			// 'click .delete': 'destroy',
-			'click .cont_addNew': 'addNewtest'
-		},
-		addNewtest: function(){
-			// alert('増やします。');
-			var val = {};
-			val.module_key = $('.cont_form_addElement select', contConteditor.winIframe.document).val();
-			this.collection.add(val);
+			// 'click .cont_addNew': 'addNewtest'
 		}
+		// addNewtest: function(){
+		// 	// alert('増やします。');
+		// 	var selectedValue = $('.cont_form_addElement select option:selected', contConteditor.winIframe.document).attr('value');
+		// 	if( !selectedValue ){
+		// 		return this;
+		// 	}
+		// 	var val = {};
+		// 	val.module_id = selectedValue;
+		// 	this.collection.add(val);
+		// 	return this;
+		// }
 
 	});
 

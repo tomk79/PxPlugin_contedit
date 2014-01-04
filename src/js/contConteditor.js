@@ -22,6 +22,7 @@ window.contConteditor = new (function(){
 	_this.docModulesView = {};
 	_this.docContents = {};
 	_this.docContentsView = {};
+	_this.uiAddElement = {};
 
 
 	this.standby = function(div){
@@ -82,22 +83,17 @@ window.contConteditor = new (function(){
 		_this.docModules = new _this.cls.collections.documentModules(_moduleDefinitions.list);
 		_this.docModulesView = new _this.cls.views.documentModules({collection: _this.docModules});
 
-		// document module collection にモジュールを追加する。
-		// for( var i in _moduleDefinitions.list ){
-		// 	_this.docModules.add( new _this.cls.models.documentModule(_moduleDefinitions.list[i]) );
-		// }
-
 		// document contents collection を、一旦空白で作成する。
 		_this.docContents = new _this.cls.collections.documentContents(_contentData);
 		_this.docContentsView = new _this.cls.views.documentContents({collection: _this.docContents});
 
-		// document contents collection にコンテンツを追加する。
-		// for( var i in _contentData ){
-		// 	_this.docContents.add( new _this.cls.models.documentContent(_contentData[i]) );
-		// }
-
 		// 編集画面を描画する
-		$('#content', _this.winIframe.document).html( _this.docContentsView.render().el );
+		$('#content', _this.winIframe.document)
+			.html( _this.docContentsView.render().el )
+		;
+
+		// 新規エレメント追加UI
+		_this.uiAddElement = new contConteditor.cls.views.uiAddElement({collection: _this.docContents});
 
 	}//editorOnLoad()
 

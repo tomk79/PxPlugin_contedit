@@ -81,6 +81,12 @@ class pxplugin_contedit_editor_main{
 <body>
 <div class="conteditUI conteditUI-controlpanel">
 	<div class="conteditUI-title">contedit: <?php print t::h( $this->page_info['title'] ); ?></div>
+
+	<form class="conteditUI conteditUI-add_element">
+		<select><option name="">選択してください</option></select>
+		<button>要素を増やす</button>
+	</form>
+
 	<div>
 		<a href="<?php print t::h($this->plugin_obj->href( ':' )); ?>" target="_top" class="conteditUI-btn_cancel" onclick="if( !confirm('編集内容は保存されていません。画面を遷移してもよろしいですか？') ){return false;}">キャンセル</a>
 		<a href="<?php print t::h($this->plugin_obj->href( ':' )); ?>" target="_top" class="conteditUI-btn_ok" onclick="window.contConteditor.save(this.href); return false;">保存</a>
@@ -168,16 +174,6 @@ window.onload = function(){ window.parent.contConteditor.standby('canvas'); }
 				// ドキュメントモジュールの定義を得る
 				$obj_modules = $this->plugin_obj->factory_model_modules();
 				$rtn = $obj_modules->get_module_definitions();
-				break;
-			case 'get_module_keys':
-				// ドキュメントモジュールのキーの一覧を得る
-				$obj_modules = $this->plugin_obj->factory_model_modules();
-				$rtn = $obj_modules->get_module_keys();
-				break;
-			case 'get_module_list':
-				// ドキュメントモジュールの一覧を得る
-				$obj_modules = $this->plugin_obj->factory_model_modules();
-				$rtn = $obj_modules->get_module_list();
 				break;
 			case 'get_document_contents':
 				// UTODO: 保存されたコンテンツデータ(ユーザーが編集したデータ)を返す。

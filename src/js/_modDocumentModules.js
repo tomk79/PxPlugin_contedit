@@ -8,14 +8,14 @@
 	 */
 	contConteditor.cls.models.documentModule = Backbone.Model.extend({
 		defaults:{
-			key: null,
-			category: null,
 			id: null,
-			name: 'unknown'
+			category: null,
+			name: null,
+			label: 'unknown'
 		},
 		initialize: function(){
 			// console.log('--- init model documentModule ---');
-			this.set('key', this.get('category')+'/'+this.get('id'));
+			this.set('id', this.get('category')+'/'+this.get('name'));
 			// console.log(this.toJSON());
 		}
 	});
@@ -55,7 +55,7 @@
 		remove: function() {
 			// this.$el.remove();
 		},
-		template: _.template('<%- name %>'),
+		template: _.template('<%- label %>'),
 		render: function() {
 			var template = this.template(this.model.toJSON());
 			this.$el.html(template);
@@ -86,8 +86,8 @@
 			// オプション選択要のプルダウンを作成
 			var rtn = '';
 			this.collection.each(function(docMod) {
-				rtn += '<option value="'+docMod.get('key')+'">';
-				rtn += docMod.get('name');
+				rtn += '<option value="'+docMod.get('id')+'">';
+				rtn += docMod.get('label');
 				rtn += '</option>';
 			}, this);
 			return rtn;

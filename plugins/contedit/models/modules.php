@@ -32,9 +32,9 @@ class pxplugin_contedit_models_modules{
 			$ary = array();
 			$i = 0;
 			$ary['category'] = trim($row[$i++]);
-			$ary['id'] = trim($row[$i++]);
-			$ary['path_template'] = trim($row[$i++]);
 			$ary['name'] = trim($row[$i++]);
+			$ary['path_template'] = trim($row[$i++]);
+			$ary['label'] = trim($row[$i++]);
 			$ary['template_src'] = file_get_contents( $this->path_mod_dir.'src/'.$ary['path_template'] );
 			$ary['template'] = $this->parse_module( $ary['template_src'] );
 			$ary['thumb'] = null; // ← UTODO: 検討中
@@ -45,27 +45,13 @@ class pxplugin_contedit_models_modules{
 	}
 
 	/**
-	 * モジュール一覧を取得する
-	 */
-	public function get_module_list(){
-		return $this->modules;
-	}
-
-	/**
-	 * モジュールのキーの一覧を取得する
-	 */
-	public function get_module_keys(){
-		return array_keys( $this->modules );
-	}
-
-	/**
 	 * モジュール定義を取得する
 	 */
 	public function get_module_definitions(){
 		$rtn = array();
-		$rtn['keys'] = array();
+		$rtn['index'] = array();
 		foreach( $this->modules as $i=>$row ){
-			$rtn['keys'][$row['category'].'/'.$row['id']] = $i;
+			$rtn['index'][$row['category'].'/'.$row['name']] = $i;
 		}
 		$rtn['list'] = $this->modules;
 		return $rtn;
