@@ -101,18 +101,6 @@ console.log(module);
 			// 'click .delete': 'destroy',
 			// 'click .cont_addNew': 'addNewtest'
 		}
-		// addNewtest: function(){
-		// 	// alert('増やします。');
-		// 	var selectedValue = $('.cont_form_addElement select option:selected', contConteditor.winIframe.document).attr('value');
-		// 	if( !selectedValue ){
-		// 		return this;
-		// 	}
-		// 	var val = {};
-		// 	val.module_id = selectedValue;
-		// 	this.collection.add(val);
-		// 	return this;
-		// }
-
 	});
 
 

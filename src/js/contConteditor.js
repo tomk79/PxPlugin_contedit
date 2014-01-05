@@ -109,7 +109,6 @@ window.contConteditor = new (function(){
 	 */
 	this.save = function(gotoUrlWhenSuccess){
 		var json = _this.docContents.toJSON();
-		// console.log(json);//preview
 
 		$.ajax({
 			url: '?PX=plugins.contedit.edit&mode=api&method=save' ,

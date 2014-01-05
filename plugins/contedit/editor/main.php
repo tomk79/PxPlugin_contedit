@@ -82,14 +82,14 @@ class pxplugin_contedit_editor_main{
 <div class="conteditUI conteditUI-controlpanel">
 	<div class="conteditUI-title">contedit: <?php print t::h( $this->page_info['title'] ); ?></div>
 
-	<form class="conteditUI conteditUI-add_element">
+	<form class="conteditUI-add_element">
 		<select><option name="">選択してください</option></select>
 		<button>要素を増やす</button>
 	</form>
 
 	<div>
-		<a href="<?php print t::h($this->plugin_obj->href( ':' )); ?>" target="_top" class="conteditUI-btn_cancel" onclick="if( !confirm('編集内容は保存されていません。画面を遷移してもよろしいですか？') ){return false;}">キャンセル</a>
-		<a href="<?php print t::h($this->plugin_obj->href( ':' )); ?>" target="_top" class="conteditUI-btn_ok" onclick="window.contConteditor.save(this.href); return false;">保存</a>
+		<a href="<?php print t::h($this->plugin_obj->href( ':' )); ?>" class="conteditUI-btn_cancel">キャンセル</a>
+		<a href="<?php print t::h($this->plugin_obj->href( ':' )); ?>" class="conteditUI-btn_save">保存</a>
 	</div>
 </div>
 <div class="conteditUI conteditUI-canvas"><iframe src="<?php print t::h( $this->href('canvas') ); ?>" class="conteditUI-canvas_iframe" name="conteditUICanvas"></iframe></div>
@@ -176,19 +176,14 @@ window.onload = function(){ window.parent.contConteditor.standby('canvas'); }
 				$rtn = $obj_modules->get_module_definitions();
 				break;
 			case 'get_document_contents':
-				// UTODO: 保存されたコンテンツデータ(ユーザーが編集したデータ)を返す。
+				// 保存されたコンテンツデータ(ユーザーが編集したデータ)を返す。
 				$obj_content = $this->plugin_obj->factory_model_content( $this->page_info );
 				$rtn = array();
 				$rtn['result'] = 1;
 				$rtn['data'] = $obj_content->get();
 				break;
 			case 'save':
-				// UTODO: conteditUIが編集した結果を受け取って保存する
-
-				// ob_start();
-				// var_dump($this->px->req()->get_param('document_contents'));
-				// $test = ob_get_clean();
-
+				// conteditUIが編集した結果を受け取って保存する
 				$obj_content = $this->plugin_obj->factory_model_content( $this->page_info );
 				if( !$obj_content->set( $this->px->req()->get_param('document_contents') ) ){
 					$rtn = array();

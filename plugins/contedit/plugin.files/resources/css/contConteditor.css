@@ -32,7 +32,7 @@ body {
   border-radius: 0.3em;
   color: #000;
 }
-.conteditUI.conteditUI-controlpanel .conteditUI-btn_ok {
+.conteditUI.conteditUI-controlpanel .conteditUI-btn_save {
   text-align: center;
   width: 100px;
   font-weight: bold;
@@ -44,12 +44,12 @@ body {
 .conteditUI.conteditUI-controlpanel .conteditUI-title {
   font-weight: bold;
 }
-.conteditUI.conteditUI-add_element {
+.conteditUI.conteditUI-controlpanel .conteditUI-add_element {
   border: 1px solid #999;
   padding: 5px;
   margin: 5px auto;
 }
-.conteditUI.conteditUI-add_element button {
+.conteditUI.conteditUI-controlpanel .conteditUI-add_element button {
   color: #444;
   padding: 0.2em 1em;
 }
