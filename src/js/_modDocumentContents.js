@@ -4,15 +4,25 @@
 (function(contConteditor){
 
 	/**
+	 * モジュールIDに対応するモジュールを持ってくる。
+	 */
+	function getModule( modId ){
+		return contConteditor.docModules.get( {id: modId} );
+	}
+
+	/**
 	 * ドキュメントコンテンツ: モデル
 	 */
 	contConteditor.cls.models.documentContent = Backbone.Model.extend({
 		defaults:{
-			module_id: null,
-			name: 'unknown'
+			module_id: null ,
+			data: null ,
+			module_label: 'unknown'
 		},
 		initialize: function(){
-			// this.set('key', this.get('category')+'/'+this.get('id'));
+			var module = getModule( this.get('module_id') );
+console.log(module);
+			this.set('module_label', module.get('label') );
 		}
 	});
 
@@ -36,13 +46,14 @@
 			// this.model.on('change', this.render, this);
 		},
 		events: {
-			// 'click .toggle': 'toggle',
-			'click .cont_docCont_delete': 'destroy'
+			'click .cont_docCont_edit': 'uiEdit' ,
+			'click .cont_docCont_delete': 'uiDestroy'
 		},
-		toggle: function() {
-			// this.model.set('completed', !this.model.get('completed'));
+		uiEdit: function() {
+			// 要素を編集する
+			alert('開発中です。')
 		},
-		destroy: function() {
+		uiDestroy: function() {
 			// 要素を削除する
 			this.model.destroy();
 		},
@@ -51,7 +62,8 @@
 		},
 		template: _.template(
 			  '<div>'
-			+ 'TEST: <%- name %>: <%- module_id %>'
+			+ '<%- module_label %>: <%- module_id %>'
+			+ '<button class="cont_docCont_edit">edit</button>'
 			+ '<button class="cont_docCont_delete">delete</button>'
 			+ '</div>'
 		),
