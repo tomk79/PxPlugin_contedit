@@ -24,6 +24,28 @@ window.contConteditor = new (function(){
 	_this.docContentsView = {};
 	_this.uiAddElement = {};
 
+	(function(){
+		function fitCanvas(){
+			var win = $(document);
+			$('.conteditUI-canvas')
+				.height( win.height() )
+			;
+		}
+		$(window).load( function(){
+			$(window).on('resize', function(){
+				fitCanvas();
+				return true;
+			});
+			fitCanvas();
+			$('.conteditUI-controlpanel').draggable();
+		} );
+		$(window).bind('unload', function(){
+			if( !confirm('編集内容は保存されていません。画面を遷移してもよろしいですか？') ){
+				return false;
+			}
+			return true;
+		});
+	})();
 
 	this.standby = function(div){
 		_loadingStatus[div] = true;
@@ -117,7 +139,7 @@ window.contConteditor = new (function(){
 			},
 			success: function(data){
 				if(!data.result){
-					alert('ERROR: ' + data.error);
+					alert('ERROR: ' + data.message);
 					return;
 				}
 				window.location.href = gotoUrlWhenSuccess;

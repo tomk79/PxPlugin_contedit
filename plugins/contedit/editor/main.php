@@ -53,30 +53,6 @@ class pxplugin_contedit_editor_main{
 <script type="text/javascript" src="?PX=plugins.contedit.edit&amp;mode=resources&amp;path_resource=js/underscore-min.js"></script>
 <script type="text/javascript" src="?PX=plugins.contedit.edit&amp;mode=resources&amp;path_resource=js/backbone-min.js"></script>
 <script type="text/javascript" src="?PX=plugins.contedit.edit&amp;mode=resources&amp;path_resource=js/contConteditor.min.js"></script>
-<script type="text/javascript">
-(function(){
-	function fitCanvas(){
-		var win = $(document);
-		$('.conteditUI-canvas')
-			.height( win.height() )
-		;
-	}
-	$(window).load( function(){
-		$(window).on('resize', function(){
-			fitCanvas();
-			return true;
-		});
-		fitCanvas();
-		$('.conteditUI-controlpanel').draggable();
-	} );
-	$(window).bind('unload', function(){
-		if( !confirm('編集内容は保存されていません。画面を遷移してもよろしいですか？') ){
-			return false;
-		}
-		return true;
-	});
-})();
-</script>
 </head>
 <body>
 <div class="conteditUI conteditUI-controlpanel">
@@ -172,11 +148,13 @@ window.onload = function(){ window.parent.contConteditor.standby('canvas'); }
 		switch( $this->px->req()->get_param('method') ){
 			case 'get_module_definitions':
 				// ドキュメントモジュールの定義を得る
+				// ?PX=plugins.contedit.edit&mode=api&method=get_module_definitions
 				$obj_modules = $this->plugin_obj->factory_model_modules();
 				$rtn = $obj_modules->get_module_definitions();
 				break;
 			case 'get_document_contents':
 				// 保存されたコンテンツデータ(ユーザーが編集したデータ)を返す。
+				// ?PX=plugins.contedit.edit&mode=api&method=get_document_contents
 				$obj_content = $this->plugin_obj->factory_model_content( $this->page_info );
 				$rtn = array();
 				$rtn['result'] = 1;
@@ -184,17 +162,18 @@ window.onload = function(){ window.parent.contConteditor.standby('canvas'); }
 				break;
 			case 'save':
 				// conteditUIが編集した結果を受け取って保存する
+				// ?PX=plugins.contedit.edit&mode=api&method=save&document_contents=
 				$obj_content = $this->plugin_obj->factory_model_content( $this->page_info );
 				if( !$obj_content->set( $this->px->req()->get_param('document_contents') ) ){
 					$rtn = array();
 					$rtn['result'] = 0;
-					$rtn['error'] = 'データ形式にエラーがあります。';
+					$rtn['message'] = '入力データの形式にエラーがあります。';
 					break;
 				}
 				if( !$obj_content->save() ){
 					$rtn = array();
 					$rtn['result'] = 0;
-					$rtn['error'] = 'データの保存に失敗しました。';
+					$rtn['message'] = 'データの保存に失敗しました。';
 					break;
 				}
 				$rtn = array();
