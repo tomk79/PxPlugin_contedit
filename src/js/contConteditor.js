@@ -24,7 +24,6 @@ window.contConteditor = new (function(){
 	_this.docContents = {};
 	_this.docContentsView = {};
 	_this.uiControlPanel = {};
-	_this.uiControlPanel = {};
 	_this.uiWinEditElement = {};
 
 	(function(){
@@ -118,7 +117,7 @@ window.contConteditor = new (function(){
 		;
 
 		// 編集パネル
-		_this.uiControlPanel = new contConteditor.cls.views.uiControlPanel({});
+		_this.uiControlPanel = new contConteditor.cls.views.uiControlPanel({collection: _this.docContents});
 
 	}//editorOnLoad()
 

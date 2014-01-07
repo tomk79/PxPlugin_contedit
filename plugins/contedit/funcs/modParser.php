@@ -37,7 +37,7 @@ class pxplugin_contedit_funcs_modParser{
 			$elm = array();
 			$idx = 1;
 			$elm['before']     = $matched[$idx++];
-			$elm['function']   = trim($matched[$idx++]);
+			$elm['func']       = trim($matched[$idx++]);
 			$elm['attribute_src'] = trim($matched[$idx++]);
 			$elm['attributes'] = $this->parse_attributes( $elm['attribute_src'] );//開発中
 			$elm['after']      = $matched[$idx++];
@@ -45,10 +45,10 @@ class pxplugin_contedit_funcs_modParser{
 			if( strlen($elm['before']) ){
 				array_push( $rtn, $this->create_text_node( $elm['before'] ) );
 			}
-			$children = $this->search_close_tag($elm['after'], $elm['function']);
+			$children = $this->search_close_tag($elm['after'], $elm['func']);
 			$bin = $children['after'];
 
-			array_push( $rtn, $this->create_template_node( $elm['function'], $elm['attributes'], $children['inner'] ) );
+			array_push( $rtn, $this->create_template_node( $elm['func'], $elm['attributes'], $children['inner'] ) );
 			continue;
 		}
 
@@ -79,8 +79,8 @@ class pxplugin_contedit_funcs_modParser{
 	 */
 	private function create_template_node($method, $attr, $bin_inner){
 		$rtn = array();
-		$rtn['type']     = 'function';
-		$rtn['function'] = $method;
+		$rtn['type']     = 'func';
+		$rtn['func']     = $method;
 		$rtn['attr']     = $attr;
 		$rtn['children'] = $this->parse($bin_inner);
 		return $rtn;
@@ -103,7 +103,7 @@ class pxplugin_contedit_funcs_modParser{
 			$idx = 1;
 			$elm['before']     = $matched[$idx++];
 			$elm['close_tag']  = trim($matched[$idx++]);
-			$elm['function']   = trim($matched[$idx++]);
+			$elm['func']       = trim($matched[$idx++]);
 			$elm['attribute_src'] = trim($matched[$idx++]);
 			$elm['after']      = $matched[$idx++];
 
@@ -113,7 +113,7 @@ class pxplugin_contedit_funcs_modParser{
 				// 閉じタグを発見した。
 				break;
 			}else{
-				$before .= '{'.$elm['function'].' '.$elm['attribute_src'].'}';
+				$before .= '{'.$elm['func'].' '.$elm['attribute_src'].'}';
 			}
 			continue;
 		}

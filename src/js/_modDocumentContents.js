@@ -2,17 +2,21 @@
  * ドキュメントコンテンツ モデル定義
  */
 (function(EDITOR){
+	var autoId = 0;//UTODO: 仮実装 ただの連番では困る。
 
 	/**
 	 * ドキュメントコンテンツ: モデル
 	 */
 	EDITOR.cls.models.documentContent = Backbone.Model.extend({
 		defaults:{
+			id: null,
 			module_id: null ,
 			data: {} ,
 			module_label: 'unknown'
 		},
 		initialize: function(){
+			this.set('id', 'autoid'+(autoId ++) );
+
 			var module = EDITOR.docModules.get( {id: this.get('module_id')} );
 			this.set('module_label', module.get('label') );
 		}
@@ -48,14 +52,12 @@
 			var tpls = [];
 			var collection = new EDITOR.cls.collections.uiWinEditElements();
 			for( var i in tplsAll ){
-				if( tplsAll[i].type != 'function' ){ continue; }
+				if( tplsAll[i].type != 'func' ){ continue; }
 				collection.add(tplsAll[i]);
 			}
 
 			// 新規エレメント追加UI
-			var uiWinEditElement = new EDITOR.cls.views.uiWinEditElements({collection: collection});
-
-			// alert('開発中です。');
+			new EDITOR.cls.views.uiWinEditElements({collection: collection, docContId: this.model.get('id')}).render();
 		},
 		uiDestroy: function() {
 			// 要素を削除する

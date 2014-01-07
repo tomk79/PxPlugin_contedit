@@ -51,6 +51,9 @@
 	 */
 	EDITOR.cls.models.uiWinEditElement = Backbone.Model.extend({
 		defaults:{
+			func: 'text',
+			type: 'func' ,
+			contentData: {}
 		},
 		initialize: function(){
 		}
@@ -61,11 +64,29 @@
 		model: EDITOR.cls.models.uiWinEditElement
 	});
 	EDITOR.cls.views.uiWinEditElement = Backbone.View.extend({
+		tagName: 'tr' ,
+		initialize: function() {
+		},
+		events: {
+			'change textarea': 'update'
+		},
+		update: function(){
+			var val = this.$el.find('textarea').val();
+			this.model.set('contentData', {src: val});
+		} ,
+		template: _.template(
+			  '<th><%- type %>: <%- func %></th>'
+			+ '<td><textarea></textarea></td>'
+		),
+		render: function() {
+			var template = this.template(this.model.toJSON());
+			this.$el.html(template);
+			return this;
+		}
 	});
 	EDITOR.cls.views.uiWinEditElements = Backbone.View.extend({
 		tagName: 'div',
 		initialize: function() {
-			this.render();
 		},
 		events: {
 			'click .conteditUI-btn_cancel': 'uiCancel',
@@ -78,31 +99,33 @@
 		},
 		uiOk: function(e){
 			e.preventDefault();
+			console.log( this.collection );
 			alert('UTODO: 開発中です。');
 			this.remove();
 			return false;
 		},
 		render: function() {
-			console.log(this);
+			// console.log(this.$el);
 			this.$el
 				.addClass('conteditUI')
 				.addClass('conteditUI-uiWinEditElements')
-				.css({
-				})
 				.append(
 					  '<div class="conteditUI-uiWinEditElements_brind">'
 					+ '</div>'
 					+ '<div class="conteditUI-uiWinEditElements_windowBody">'
-					+ '<p>開発中</p>'
+					+ '<table class="conteditUI-formTable">'
+					+ '</table>'
+					+ '<div class="conteditUI-uiWinEditElements_btnWrap">'
 					+ '<a href="" class="conteditUI-btn_cancel">Cancel</a>'
 					+ '<a href="" class="conteditUI-btn_ok">OK</a>'
+					+ '</div>'
 					+ '</div>'
 				)
 			;
 
 			this.collection.each(function(docMod) {
 				var docModView = new EDITOR.cls.views.uiWinEditElement( {model: docMod} );
-				this.$el.append( docModView.render().el );
+				this.$el.find('.conteditUI-formTable').append( docModView.render().el );
 			}, this);
 
 			$('body').append(this.$el);
