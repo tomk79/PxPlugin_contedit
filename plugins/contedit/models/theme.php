@@ -31,7 +31,7 @@ class pxplugin_contedit_models_theme{
 		$class_name = $this->px->load_px_plugin_class('/contedit/models/layout.php');
 		$obj = new $class_name( $this->px, $layout_id, $this->plugin_obj, $this );
 		return $obj;
-	}
+	}// factory_model_layout()
 
 	/**
 	 * factory: テーマオブジェクト
@@ -53,14 +53,14 @@ class pxplugin_contedit_models_theme{
 	public function get_path_dir(){
 		$path_theme_dir = $this->plugin_obj->get_path_theme_dir().$this->get_theme_id().'/';
 		return $path_theme_dir;
-	}
+	}// get_path_dir()
 
 	/**
 	 * テーマIDを取得
 	 */
 	public function get_theme_id(){
 		return $this->theme_id;
-	}
+	}// get_theme_id()
 
 	/**
 	 * レイアウトの一覧を取得
@@ -96,7 +96,7 @@ class pxplugin_contedit_models_theme{
 			return false;
 		}
 		return true;
-	}
+	}// is_theme_exists()
 
 }
 

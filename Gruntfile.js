@@ -1,11 +1,28 @@
 module.exports = function(grunt) {
-  // プロジェクトの設定
+
+  grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-contrib-compass');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     compass: {
         dist: {
             options: {
-                config: 'config.rb'
+                // config: 'config.rb',
+                httpPath : "plugins/contedit/plugin.files" ,
+                cssDir : "plugins/contedit/plugin.files/resources/css/" ,
+                sassDir : "src/sass/" ,
+                imagesDir : "plugins/contedit/plugin.files/resources/img/" ,
+                javascriptsDir : "plugins/contedit/plugin.files/resources/js/" ,
+                cache : false ,  // .sass-cacheを出力するかどうか
+                assetCacheBuster : "none" ,  // クエストにクエリ文字列付けてキャッシュ防ぐ
+                sassOptions : { 'debug_info' : false } ,  // Sassファイルをブラウザで確認
+                outputStyle : 'expanded' ,  // cssの主力形式 
+                relativeAssets : true ,  // trueで相対パス、falseで絶対パス
+                lineComments : false  // CSSファイルにSassファイルの何行目に記述されたものかを出力する
             }
         }
     },
@@ -35,11 +52,6 @@ module.exports = function(grunt) {
     }
   });
 
-  // プラグインのロードによって"uglify"タスクが提供されます。
-  grunt.loadNpmTasks('grunt-contrib-sass');
-  grunt.loadNpmTasks('grunt-contrib-compass');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // デフォルトのタスクを指定
   grunt.registerTask('default', ['watch']);

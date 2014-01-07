@@ -42,7 +42,7 @@ class pxplugin_contedit_models_modules{
 			array_push( $this->modules, $ary );
 		}
 		return true;
-	}
+	}// load_module_definitions()
 
 	/**
 	 * モジュール定義を取得する
@@ -55,7 +55,7 @@ class pxplugin_contedit_models_modules{
 		}
 		$rtn['list'] = $this->modules;
 		return $rtn;
-	}
+	}// get_module_definitions()
 
 	/**
 	 * モジュールソースをパースする

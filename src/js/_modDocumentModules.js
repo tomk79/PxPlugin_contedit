@@ -1,12 +1,12 @@
 /**
  * ドキュメントモジュール モデル定義
  */
-(function(contConteditor){
+(function(EDITOR){
 
 	/**
 	 * ドキュメントモジュール: モデル
 	 */
-	contConteditor.cls.models.documentModule = Backbone.Model.extend({
+	EDITOR.cls.models.documentModule = Backbone.Model.extend({
 		defaults:{
 			id: null,
 			category: null,
@@ -23,18 +23,18 @@
 	/**
 	 * ドキュメントモジュール: コレクション
 	 */
-	contConteditor.cls.collections.documentModules = Backbone.Collection.extend({
+	EDITOR.cls.collections.documentModules = Backbone.Collection.extend({
 		initialize: function(){
 			// console.log('--- init collection documentModules');
 			// console.log(this.toJSON());
 		},
-		model: contConteditor.cls.models.documentModule
+		model: EDITOR.cls.models.documentModule
 	});
 
 	/**
 	 * ドキュメントモジュール: ビュー
 	 */
-	contConteditor.cls.views.documentModule = Backbone.View.extend({
+	EDITOR.cls.views.documentModule = Backbone.View.extend({
 		tagName: 'li',
 		initialize: function() {
 			// this.model.on('destroy', this.remove, this);
@@ -66,18 +66,18 @@
 	/**
 	 * ドキュメントモジュール: コレクションビュー
 	 */
-	contConteditor.cls.views.documentModules = Backbone.View.extend({
+	EDITOR.cls.views.documentModules = Backbone.View.extend({
 		tagName: 'select',
 		initialize: function() {
 			// this.collection.on('add', this.addNew, this);
 		} ,
 		// addNew: function(docMod) {
-		// 	var docModView = new contConteditor.cls.views.documentModule({model: docMod});
+		// 	var docModView = new EDITOR.cls.views.documentModule({model: docMod});
 		// 	this.$el.append(docModView.render().el);
 		// } ,
 		render: function() {
 			this.collection.each(function(docMod) {
-				var docModView = new contConteditor.cls.views.documentModule({model: docMod});
+				var docModView = new EDITOR.cls.views.documentModule({model: docMod});
 				this.$el.append(docModView.render().el);
 			}, this);
 			return this;

@@ -3,6 +3,7 @@
  */
 window.contConteditor = new (function(){
 	var _this = this;
+	var EDITOR = this;
 	var _loadingStatus = {
 		'canvas': false,
 		'module_definitions': false,
@@ -22,7 +23,9 @@ window.contConteditor = new (function(){
 	_this.docModulesView = {};
 	_this.docContents = {};
 	_this.docContentsView = {};
-	_this.uiAddElement = {};
+	_this.uiControlPanel = {};
+	_this.uiControlPanel = {};
+	_this.uiWinEditElement = {};
 
 	(function(){
 		function fitCanvas(){
@@ -114,8 +117,8 @@ window.contConteditor = new (function(){
 			.html( _this.docContentsView.render().el )
 		;
 
-		// 新規エレメント追加UI
-		_this.uiAddElement = new contConteditor.cls.views.uiAddElement({collection: _this.docContents});
+		// 編集パネル
+		_this.uiControlPanel = new contConteditor.cls.views.uiControlPanel({});
 
 	}//editorOnLoad()
 

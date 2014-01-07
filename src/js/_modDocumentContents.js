@@ -1,27 +1,19 @@
 /**
  * ドキュメントコンテンツ モデル定義
  */
-(function(contConteditor){
-
-	/**
-	 * モジュールIDに対応するモジュールを持ってくる。
-	 */
-	function getModule( modId ){
-		return contConteditor.docModules.get( {id: modId} );
-	}
+(function(EDITOR){
 
 	/**
 	 * ドキュメントコンテンツ: モデル
 	 */
-	contConteditor.cls.models.documentContent = Backbone.Model.extend({
+	EDITOR.cls.models.documentContent = Backbone.Model.extend({
 		defaults:{
 			module_id: null ,
-			data: null ,
+			data: {} ,
 			module_label: 'unknown'
 		},
 		initialize: function(){
-			var module = getModule( this.get('module_id') );
-console.log(module);
+			var module = EDITOR.docModules.get( {id: this.get('module_id')} );
 			this.set('module_label', module.get('label') );
 		}
 	});
@@ -29,17 +21,17 @@ console.log(module);
 	/**
 	 * ドキュメントコンテンツ: コレクション
 	 */
-	contConteditor.cls.collections.documentContents = Backbone.Collection.extend({
+	EDITOR.cls.collections.documentContents = Backbone.Collection.extend({
 		initialize: function(){
 			// console.log('-- document contents collection standby.');
 		},
-		model: contConteditor.cls.models.documentContent
+		model: EDITOR.cls.models.documentContent
 	});
 
 	/**
 	 * ドキュメントモジュール: ビュー
 	 */
-	contConteditor.cls.views.documentContent = Backbone.View.extend({
+	EDITOR.cls.views.documentContent = Backbone.View.extend({
 		tagName: 'div',
 		initialize: function() {
 			this.model.on('destroy', this.remove, this);
@@ -49,9 +41,21 @@ console.log(module);
 			'click .cont_docCont_edit': 'uiEdit' ,
 			'click .cont_docCont_delete': 'uiDestroy'
 		},
-		uiEdit: function() {
+		uiEdit: function(e) {
 			// 要素を編集する
-			alert('開発中です。')
+			var module = EDITOR.docModules.get( {id: this.model.get('module_id')} );
+			var tplsAll = module.get('template');
+			var tpls = [];
+			var collection = new EDITOR.cls.collections.uiWinEditElements();
+			for( var i in tplsAll ){
+				if( tplsAll[i].type != 'function' ){ continue; }
+				collection.add(tplsAll[i]);
+			}
+
+			// 新規エレメント追加UI
+			var uiWinEditElement = new EDITOR.cls.views.uiWinEditElements({collection: collection});
+
+			// alert('開発中です。');
 		},
 		uiDestroy: function() {
 			// 要素を削除する
@@ -77,29 +81,25 @@ console.log(module);
 	/**
 	 * ドキュメントモジュール: コレクションビュー
 	 */
-	contConteditor.cls.views.documentContents = Backbone.View.extend({
+	EDITOR.cls.views.documentContents = Backbone.View.extend({
 		tagName: 'div',
 		initialize: function() {
 			this.collection.on('add', this.addNew, this);
 		} ,
-
-		addNew: function(docMod) {
-			// alert('ここで増やす処理。');
-			var docModView = new contConteditor.cls.views.documentContent({model: docMod});
-			this.$el.append(docModView.render().el);
-		} ,
-
-		render: function() {
-			this.collection.each(function(docMod) {
-				var docModView = new contConteditor.cls.views.documentContent( {model: docMod} );
-				this.$el.append( docModView.render().el );
-			}, this);
-			return this;
-		} ,
-
 		events: {
 			// 'click .delete': 'destroy',
 			// 'click .cont_addNew': 'addNewtest'
+		} ,
+		addNew: function(docMod) {
+			var docModView = new EDITOR.cls.views.documentContent({model: docMod});
+			this.$el.append(docModView.render().el);
+		} ,
+		render: function() {
+			this.collection.each(function(docMod) {
+				var docModView = new EDITOR.cls.views.documentContent( {model: docMod} );
+				this.$el.append( docModView.render().el );
+			}, this);
+			return this;
 		}
 	});
 

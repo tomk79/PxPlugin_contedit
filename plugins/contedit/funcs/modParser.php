@@ -38,7 +38,8 @@ class pxplugin_contedit_funcs_modParser{
 			$idx = 1;
 			$elm['before']     = $matched[$idx++];
 			$elm['function']   = trim($matched[$idx++]);
-			$elm['attributes'] = trim($matched[$idx++]);
+			$elm['attribute_src'] = trim($matched[$idx++]);
+			$elm['attributes'] = $this->parse_attributes( $elm['attribute_src'] );//開発中
 			$elm['after']      = $matched[$idx++];
 
 			if( strlen($elm['before']) ){
@@ -51,6 +52,15 @@ class pxplugin_contedit_funcs_modParser{
 			continue;
 		}
 
+		return $rtn;
+	}
+
+	/**
+	 * 属性情報をパースする。
+	 */
+	private function parse_attributes( $attr_src ){
+		$rtn = array();
+		// UTODO: 開発中です。
 		return $rtn;
 	}
 
@@ -94,7 +104,7 @@ class pxplugin_contedit_funcs_modParser{
 			$elm['before']     = $matched[$idx++];
 			$elm['close_tag']  = trim($matched[$idx++]);
 			$elm['function']   = trim($matched[$idx++]);
-			$elm['attributes'] = trim($matched[$idx++]);
+			$elm['attribute_src'] = trim($matched[$idx++]);
 			$elm['after']      = $matched[$idx++];
 
 			$before .= $elm['before'];
@@ -103,7 +113,7 @@ class pxplugin_contedit_funcs_modParser{
 				// 閉じタグを発見した。
 				break;
 			}else{
-				$before .= '{'.$elm['function'].' '.$elm['attributes'].'}';
+				$before .= '{'.$elm['function'].' '.$elm['attribute_src'].'}';
 			}
 			continue;
 		}
