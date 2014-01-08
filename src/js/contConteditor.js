@@ -41,11 +41,8 @@ window.contConteditor = new (function(){
 			fitCanvas();
 			$('.conteditUI-controlpanel').draggable();
 		} );
-		$(window).bind('unload', function(){
-			if( !confirm('編集内容は保存されていません。画面を遷移してもよろしいですか？') ){
-				return false;
-			}
-			return true;
+		$(window).bind('beforeunload', function(){
+			return '編集内容は保存されていません。画面を遷移してもよろしいですか？';
 		});
 	})();
 
@@ -89,9 +86,9 @@ window.contConteditor = new (function(){
 	function editorOnLoad(){
 		_this.winIframe = window.conteditUICanvas;
 
-		// コンテンツ編集画面を開発中表示に切り替える。
+		// コンテンツ編集画面を準備中表示に切り替える。
 		_elmContent = $('#content', _this.winIframe.document);
-		_elmContent.html('<p>開発中です。</p>');
+		_elmContent.html('<p>編集画面を準備しています。しばらくお待ち下さい。</p>');
 
 		// 遷移する処理を無効化
 		$('a', _this.winIframe.document).each(function(){
@@ -108,8 +105,8 @@ window.contConteditor = new (function(){
 		_this.docModulesView = new _this.cls.views.documentModules({collection: _this.docModules});
 
 		// document contents collection を、一旦空白で作成する。
-		_this.docContents = new _this.cls.collections.documentContents(_contentData);
-		_this.docContentsView = new _this.cls.views.documentContents({collection: _this.docContents});
+		_this.docContents = new _this.cls.collections.moduleContents(_contentData);
+		_this.docContentsView = new _this.cls.views.moduleContents({collection: _this.docContents});
 
 		// 編集画面を描画する
 		$('#content', _this.winIframe.document)
@@ -150,6 +147,6 @@ window.contConteditor = new (function(){
 				alert(opt.apiMethod + ' ERROR.');
 			}
 		});
-	}
+	}//save()
 
 })();

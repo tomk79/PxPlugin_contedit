@@ -21,11 +21,13 @@
 			if( !confirm('編集内容は保存されていません。画面を遷移してもよろしいですか？') ){
 				return false;
 			}
+			$(window).unbind('beforeunload');
 			return true;
 		},
 		uiSave: function(e){
 			// 保存ボタンをクリック
 			EDITOR.save(e.target.href);
+			$(window).unbind('beforeunload');
 			return false;
 		},
 		uiAddNewElement: function(e){
@@ -49,11 +51,12 @@
 	/**
 	 * エレメント編集ウィンドウ (modal window)
 	 */
-	EDITOR.cls.models.uiWinEditElement = Backbone.Model.extend({
+	var _model_uiWinEditElement = Backbone.Model.extend({
 		defaults:{
+			edit_element_id: null,
 			func: 'text',
 			type: 'func' ,
-			contentData: {}
+			content_data: {}
 		},
 		initialize: function(){
 		}
@@ -61,9 +64,9 @@
 	EDITOR.cls.collections.uiWinEditElements = Backbone.Collection.extend({
 		initialize: function(){
 		},
-		model: EDITOR.cls.models.uiWinEditElement
+		model: _model_uiWinEditElement
 	});
-	EDITOR.cls.views.uiWinEditElement = Backbone.View.extend({
+	var _view_uiWinEditElement = Backbone.View.extend({
 		tagName: 'tr' ,
 		initialize: function() {
 		},
@@ -72,7 +75,7 @@
 		},
 		update: function(){
 			var val = this.$el.find('textarea').val();
-			this.model.set('contentData', {src: val});
+			this.model.set('content_data', {src: val});
 		} ,
 		template: _.template(
 			  '<th><%- type %>: <%- func %></th>'
@@ -81,6 +84,9 @@
 		render: function() {
 			var template = this.template(this.model.toJSON());
 			this.$el.html(template);
+			if( this.model.get('content_data') ){
+				this.$el.find('textarea').val(this.model.get('content_data').src);
+			}
 			return this;
 		}
 	});
@@ -92,6 +98,10 @@
 			'click .conteditUI-btn_cancel': 'uiCancel',
 			'click .conteditUI-btn_ok': 'uiOk'
 		},
+		setTargetModel: function(moduleContentModel){
+			this.moduleContentModel = moduleContentModel;
+			return this;
+		},
 		uiCancel: function(e){
 			e.preventDefault();
 			this.remove();
@@ -99,13 +109,15 @@
 		},
 		uiOk: function(e){
 			e.preventDefault();
-			console.log( this.collection );
-			alert('UTODO: 開発中です。');
+			var content_data = {};
+			this.collection.each(function(model) {
+				content_data[model.get('edit_element_id')] = model.get('content_data');
+			}, this);
+			this.moduleContentModel.set('content_data', content_data);
 			this.remove();
 			return false;
 		},
 		render: function() {
-			// console.log(this.$el);
 			this.$el
 				.addClass('conteditUI')
 				.addClass('conteditUI-uiWinEditElements')
@@ -123,9 +135,12 @@
 				)
 			;
 
-			this.collection.each(function(docMod) {
-				var docModView = new EDITOR.cls.views.uiWinEditElement( {model: docMod} );
-				this.$el.find('.conteditUI-formTable').append( docModView.render().el );
+			var _moduleContentModel = this.moduleContentModel;
+			this.collection.each(function(model) {
+				model.set('content_data', _moduleContentModel.get('content_data')[model.get('edit_element_id')]);
+
+				var view = new _view_uiWinEditElement( {model: model} );
+				this.$el.find('.conteditUI-formTable').append( view.render().el );
 			}, this);
 
 			$('body').append(this.$el);

@@ -7,16 +7,14 @@
 	/**
 	 * ドキュメントコンテンツ: モデル
 	 */
-	EDITOR.cls.models.documentContent = Backbone.Model.extend({
+	EDITOR.cls.models.moduleContent = Backbone.Model.extend({
 		defaults:{
-			id: null,
+			element_id: 'autoid'+(autoId ++),
 			module_id: null ,
-			data: {} ,
+			content_data: {} ,
 			module_label: 'unknown'
 		},
 		initialize: function(){
-			this.set('id', 'autoid'+(autoId ++) );
-
 			var module = EDITOR.docModules.get( {id: this.get('module_id')} );
 			this.set('module_label', module.get('label') );
 		}
@@ -25,21 +23,21 @@
 	/**
 	 * ドキュメントコンテンツ: コレクション
 	 */
-	EDITOR.cls.collections.documentContents = Backbone.Collection.extend({
+	EDITOR.cls.collections.moduleContents = Backbone.Collection.extend({
 		initialize: function(){
 			// console.log('-- document contents collection standby.');
 		},
-		model: EDITOR.cls.models.documentContent
+		model: EDITOR.cls.models.moduleContent
 	});
 
 	/**
 	 * ドキュメントモジュール: ビュー
 	 */
-	EDITOR.cls.views.documentContent = Backbone.View.extend({
+	EDITOR.cls.views.moduleContent = Backbone.View.extend({
 		tagName: 'div',
 		initialize: function() {
 			this.model.on('destroy', this.remove, this);
-			// this.model.on('change', this.render, this);
+			this.model.on('change', this.render, this);
 		},
 		events: {
 			'click .cont_docCont_edit': 'uiEdit' ,
@@ -57,7 +55,7 @@
 			}
 
 			// 新規エレメント追加UI
-			new EDITOR.cls.views.uiWinEditElements({collection: collection, docContId: this.model.get('id')}).render();
+			new EDITOR.cls.views.uiWinEditElements({collection: collection}).setTargetModel(this.model).render();
 		},
 		uiDestroy: function() {
 			// 要素を削除する
@@ -83,7 +81,7 @@
 	/**
 	 * ドキュメントモジュール: コレクションビュー
 	 */
-	EDITOR.cls.views.documentContents = Backbone.View.extend({
+	EDITOR.cls.views.moduleContents = Backbone.View.extend({
 		tagName: 'div',
 		initialize: function() {
 			this.collection.on('add', this.addNew, this);
@@ -93,12 +91,12 @@
 			// 'click .cont_addNew': 'addNewtest'
 		} ,
 		addNew: function(docMod) {
-			var docModView = new EDITOR.cls.views.documentContent({model: docMod});
+			var docModView = new EDITOR.cls.views.moduleContent({model: docMod});
 			this.$el.append(docModView.render().el);
 		} ,
 		render: function() {
 			this.collection.each(function(docMod) {
-				var docModView = new EDITOR.cls.views.documentContent( {model: docMod} );
+				var docModView = new EDITOR.cls.views.moduleContent( {model: docMod} );
 				this.$el.append( docModView.render().el );
 			}, this);
 			return this;
