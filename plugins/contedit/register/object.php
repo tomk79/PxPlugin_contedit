@@ -47,6 +47,13 @@ class pxplugin_contedit_register_object{
 	}
 
 	/**
+	 * モジュールディレクトリのパスを取得する
+	 */
+	public function get_path_module_dir(){
+		return $this->px->get_conf('paths.px_dir').'plugins/contedit/plugin.files/modules/';
+	}
+
+	/**
 	 * コンテンツファイルの情報を取得する
 	 */
 	public function get_content_file_info( $page_info ){
@@ -94,7 +101,7 @@ class pxplugin_contedit_register_object{
 	}
 
 	/**
-	 * factory: モジュールモデル
+	 * factory: モジュール一覧モデル
 	 */
 	public function factory_model_modules(){
 		$class_name = $this->px->load_px_plugin_class('/contedit/models/modules.php');

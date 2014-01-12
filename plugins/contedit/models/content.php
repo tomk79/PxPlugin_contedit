@@ -9,7 +9,7 @@ class pxplugin_contedit_models_content{
 	private $page_info;
 	private $cont_info;
 	private $plugin_obj;
-	private $data;
+	private $cont_data;
 
 	/**
 	 * コンストラクタ
@@ -24,7 +24,7 @@ class pxplugin_contedit_models_content{
 
 		$this->cont_info = $this->parse_content_info($this->page_info);
 
-		$this->data = $this->load_contents_data();
+		$this->cont_data = $this->load_contents_data();
 	}
 
 	/**
@@ -79,14 +79,14 @@ class pxplugin_contedit_models_content{
 	 * コンテンツデータ一式を取得する
 	 */
 	public function get(){
-		return $this->data;
+		return $this->cont_data;
 	}//get()
 
 	/**
 	 * コンテンツデータ一式をセットする
 	 */
 	public function set( $data ){
-		$this->data = $data;
+		$this->cont_data = $data;
 		return true;
 	}//set()
 
@@ -115,12 +115,46 @@ class pxplugin_contedit_models_content{
 			}
 		}
 
-		// ファイルとして保存する。
-		if( !$this->px->dbh()->file_overwrite( $cont_info['realpath_contedit_src_dir'].'content_src.json', json_encode( $this->data ) ) ){
+		// ファイルとして保存する
+		if( !$this->px->dbh()->file_overwrite( $cont_info['realpath_contedit_src_dir'].'content_src.json', json_encode( $this->cont_data ) ) ){
 			return false;
 		}
+		$this->cont_data = $this->load_contents_data();//リロードする
+
 		return true;
 	}//save()
+
+	/**
+	 * コンテンツHTMLをビルドする
+	 */
+	public function build(){
+		$cont_info = $this->cont_info;
+		$cont_data = $this->cont_data;
+		$mod_modules = $this->plugin_obj->factory_model_modules();
+
+		$src = '';
+
+		foreach( $cont_data as $cont_element ){
+			$mod_module = $mod_modules->get_module( $cont_element->module_id );
+
+			foreach( $mod_module['template'] as $tpl_elm ){
+				if( $tpl_elm['type'] == 'text' ){
+					$src .= $tpl_elm['content'];
+				}elseif( $tpl_elm['type'] == 'func' ){
+					$contElmData = $cont_element->content_data->$tpl_elm['edit_element_id'];
+					$src .= $contElmData->src;
+				}
+			}
+			unset( $mod_module );
+		}
+
+		// 出来上がったソースでコンテンツを上書き
+		if( !$this->px->dbh()->file_overwrite( $cont_info['realpath_content'], $src ) ){
+			return false;
+		}
+
+		return true;
+	}
 
 }
 

@@ -17,7 +17,7 @@ class pxplugin_contedit_models_modules{
 	public function __construct( $px, $plugin_obj ){
 		$this->px = $px;
 		$this->plugin_obj = $plugin_obj;
-		$this->path_mod_dir = $this->px->get_conf('paths.px_dir').'plugins/contedit/plugin.files/modules/';
+		$this->path_mod_dir = $this->plugin_obj->get_path_module_dir();
 
 		$this->load_module_definitions();
 	}
@@ -38,6 +38,7 @@ class pxplugin_contedit_models_modules{
 			$ary['template_src'] = file_get_contents( $this->path_mod_dir.'src/'.$ary['path_template'] );
 			$ary['template'] = $this->parse_module( $ary['template_src'] );
 			$ary['thumb'] = null; // ← UTODO: 検討中
+			$ary['module_id'] = $ary['category'].'/'.$ary['name'];
 
 			array_push( $this->modules, $ary );
 		}
@@ -74,7 +75,16 @@ class pxplugin_contedit_models_modules{
 
 		// $rtn = array();
 		return $rtn;
-	}
+	}//parse_module()
+
+	/**
+	 * モジュールのIDからモジュールモデルを取得する
+	 */
+	public function get_module( $module_id ){
+		$def = $this->get_module_definitions();
+		$rtn = $def['list'][$def['index'][$module_id]];
+		return $rtn;
+	}//get_module()
 
 }
 

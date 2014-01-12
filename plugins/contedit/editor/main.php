@@ -28,6 +28,8 @@ class pxplugin_contedit_editor_main{
 			case 'canvas': return $this->page_canvas(); break;
 			case 'resources': return $this->page_resources(); break;
 			case 'api': return $this->page_api(); break;
+			case 'build': return $this->page_build(); break;
+			case 'thanks': return $this->page_thanks(); break;
 			default: break;
 		}
 		return $this->page_home();
@@ -65,7 +67,7 @@ class pxplugin_contedit_editor_main{
 
 	<div>
 		<a href="<?php print t::h($this->plugin_obj->href( ':' )); ?>" class="conteditUI-btn_cancel">キャンセル</a>
-		<a href="<?php print t::h($this->plugin_obj->href( ':' )); ?>" class="conteditUI-btn_save">保存</a>
+		<a href="<?php print t::h($this->href( 'thanks' )); ?>" class="conteditUI-btn_save">保存</a>
 	</div>
 </div>
 <div class="conteditUI conteditUI-canvas"><iframe src="<?php print t::h( $this->href('canvas') ); ?>" class="conteditUI-canvas_iframe" name="conteditUICanvas"></iframe></div>
@@ -176,6 +178,12 @@ window.onload = function(){ window.parent.contConteditor.standby('canvas'); }
 					$rtn['message'] = 'データの保存に失敗しました。';
 					break;
 				}
+				if( !$obj_content->build() ){
+					$rtn = array();
+					$rtn['result'] = 0;
+					$rtn['message'] = 'コンテンツのビルドに失敗しました。';
+					break;
+				}
 				$rtn = array();
 				$rtn['result'] = 1;
 				break;
@@ -191,10 +199,40 @@ window.onload = function(){ window.parent.contConteditor.standby('canvas'); }
 		exit;
 	}
 
+	/**
+	 * page_build()
+	 * 開発用のビュー
+	 */
+	private function page_build(){
+		$obj_content = $this->plugin_obj->factory_model_content( $this->page_info );
+		$result = $obj_content->build();
+		if( !$result ){
+			$rtn = '';
+			$rtn .= '<p class="error">保存に失敗しました。</p>'."\n";
+			return $rtn;
+		}
+
+		$rtn = '';
+		$rtn .= '<p>保存しました。</p>'."\n";
+		$rtn .= '<p><a href="'.t::h($this->plugin_obj->href(':')).'">戻る</a></p>'."\n";
+		return $rtn;
+	}
+
+	/**
+	 * page_thanks()
+	 */
+	private function page_thanks(){
+		$rtn = '';
+		$rtn .= '<p>保存しました。</p>'."\n";
+		$rtn .= '<p><a href="'.t::h($this->plugin_obj->href(':')).'">戻る</a></p>'."\n";
+		$rtn .= '<p><a href="?" target="_blank">ページを見る</a></p>'."\n";
+		return $rtn;
+	}
+
 	// ----------------------------------------------------------------------------
 
 	/**
-	 * 
+	 * href()
 	 */
 	private function href( $mode ){
 		$rtn = '';
