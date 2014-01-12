@@ -142,7 +142,12 @@ class pxplugin_contedit_models_content{
 					$src .= $tpl_elm['content'];
 				}elseif( $tpl_elm['type'] == 'func' ){
 					$contElmData = $cont_element->content_data->$tpl_elm['edit_element_id'];
-					$src .= $contElmData->src;
+					$obj_func = $this->plugin_obj->factory_funcs( $tpl_elm['func'] );
+					if( $obj_func ){
+						$src .= $obj_func->bind( $tpl_elm, $contElmData );
+					}else{
+						$src .= t::text2html( $contElmData->src );
+					}
 				}
 			}
 			unset( $mod_module );

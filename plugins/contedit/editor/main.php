@@ -224,8 +224,7 @@ window.onload = function(){ window.parent.contConteditor.standby('canvas'); }
 	private function page_thanks(){
 		$rtn = '';
 		$rtn .= '<p>保存しました。</p>'."\n";
-		$rtn .= '<p><a href="'.t::h($this->plugin_obj->href(':')).'">戻る</a></p>'."\n";
-		$rtn .= '<p><a href="?" target="_blank">ページを見る</a></p>'."\n";
+		$rtn .= '<p><a href="'.t::h($this->plugin_obj->href(':')).'">ページリストへ戻る</a> | <a href="?" target="_blank">作成したページを見る</a> | <a href="'.t::h($this->plugin_obj->href(':edit')).'">再編集</a></p>'."\n";
 		return $rtn;
 	}
 

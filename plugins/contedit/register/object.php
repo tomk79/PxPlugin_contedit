@@ -131,10 +131,23 @@ class pxplugin_contedit_register_object{
 	 * factory: モジュールパーサー
 	 */
 	public function factory_modParser(){
-		$class_name = $this->px->load_px_plugin_class('/contedit/funcs/modParser.php');
+		$class_name = $this->px->load_px_plugin_class('/contedit/helpers/modParser.php');
 		$obj = new $class_name();
 		return $obj;
 	}
+
+	/**
+	 * factory: ファンクションオブジェクトをロード
+	 */
+	public function factory_funcs( $func_name ){
+		$class_name = $this->px->load_px_plugin_class( '/contedit/funcs/'.$func_name.'.php' );
+		if( !strlen($class_name) ){
+			return false;
+		}
+		$obj = new $class_name( $this->px, $this );
+		return $obj;
+	}
+
 
 	// ------------------------------------------------------------------------------------------------------------------
 
