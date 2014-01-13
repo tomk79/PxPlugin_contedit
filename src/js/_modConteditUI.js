@@ -9,11 +9,11 @@
 	EDITOR.cls.views.uiControlPanel = Backbone.View.extend({
 		el: '.conteditUI.conteditUI-controlpanel',
 		initialize: function() {
-			$('.conteditUI-add_element select').append(EDITOR.docModulesView.mk_modSelectOptions());
+			this.$el.find('.conteditUI-add_element select').append(EDITOR.docModulesView.mk_modSelectOptions());
 		},
 		events: {
-			'click .conteditUI-btn_cancel': 'uiCancel',
-			'click .conteditUI-btn_save': 'uiSave',
+			'click .conteditUI-btn_cancel': 'uiCancel' ,
+			'click .conteditUI-btn_save': 'uiSave' ,
 			'submit .conteditUI-add_element': 'uiAddNewElement'
 		},
 		uiCancel: function(e){
@@ -34,7 +34,7 @@
 			// 新規要素追加フォーム 送信
 			e.preventDefault();
 
-			var selectedValue = $('.conteditUI-add_element select option:selected').attr('value');
+			var selectedValue = this.$el.find('.conteditUI-add_element select option:selected').attr('value');
 			if( !selectedValue ){
 				alert('選択してください。');
 				return this;
@@ -52,12 +52,12 @@
 	 * エレメント編集ウィンドウ (modal window)
 	 */
 	var _model_uiWinEditElement = Backbone.Model.extend({
-		defaults:{
+		defaults: {
 			edit_element_id: null,
 			func: 'text',
 			type: 'func' ,
 			content_data: {}
-		},
+		} ,
 		initialize: function(){
 		}
 	});
@@ -66,7 +66,7 @@
 		},
 		model: _model_uiWinEditElement
 	});
-	var _view_uiWinEditElement = Backbone.View.extend({
+	EDITOR.cls.views.uiWinEditElementBase = Backbone.View.extend({
 		tagName: 'tr' ,
 		initialize: function() {
 		},
@@ -96,6 +96,7 @@
 		},
 		events: {
 			'click .conteditUI-btn_cancel': 'uiCancel',
+			'submit form': 'uiCancel',
 			'click .conteditUI-btn_ok': 'uiOk'
 		},
 		setTargetModel: function(moduleContentModel){
@@ -125,11 +126,13 @@
 					  '<div class="conteditUI-uiWinEditElements_brind">'
 					+ '</div>'
 					+ '<div class="conteditUI-uiWinEditElements_windowBody">'
+					+ '<form action="javascript:;">'
 					+ '<table class="conteditUI-formTable">'
 					+ '</table>'
 					+ '<div class="conteditUI-uiWinEditElements_btnWrap">'
 					+ '<a href="" class="conteditUI-btn_cancel">Cancel</a>'
 					+ '<a href="" class="conteditUI-btn_ok">OK</a>'
+					+ '</form>'
 					+ '</div>'
 					+ '</div>'
 				)
@@ -138,8 +141,12 @@
 			var _moduleContentModel = this.moduleContentModel;
 			this.collection.each(function(model) {
 				model.set('content_data', _moduleContentModel.get('content_data')[model.get('edit_element_id')]);
-
-				var view = new _view_uiWinEditElement( {model: model} );
+				var view;
+				if( EDITOR.cls.editElementUiViews[model.get('func')] ){
+					view = new EDITOR.cls.editElementUiViews[model.get('func')]( {model: model} );
+				}else{
+					view = new EDITOR.cls.views.uiWinEditElementBase( {model: model} );
+				}
 				this.$el.find('.conteditUI-formTable').append( view.render().el );
 			}, this);
 

@@ -107,7 +107,9 @@ body{
 			padding: 20px;
 			width:auto;
 			max-width:600px;
+			max-height:600px;
 			box-shadow: 5px 5px 15px rgba(0,0,0,0.4);
+			overflow:auto;
 		}
 		.conteditUI-uiWinEditElements_btnWrap{
 			text-align:center;
@@ -128,6 +130,11 @@ body{
 			}
 			th {
 				background: #e7e7e7;
+				width: 25%;
+			}
+			td {
+				background:#fff;
+				width: 75%;
 			}
 			thead th,
 			tfoot th {

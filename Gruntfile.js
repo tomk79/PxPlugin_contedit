@@ -30,7 +30,8 @@ module.exports = function(grunt) {
       build: {
         src: [
           'src/js/contConteditor.js',
-          'src/js/*.js'
+          'src/js/*.js',
+          'src/js/funcs/*.js'
         ],
         dest: 'plugins/contedit/plugin.files/resources/js/contConteditor.min.js'
       }

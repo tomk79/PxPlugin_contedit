@@ -17,7 +17,8 @@ window.contConteditor = new (function(){
 	_this.cls = {
 		collections: {},//コレクションを格納
 		models: {},//モデルを格納
-		views: {}//ビューを格納
+		views: {},//ビューを格納
+		editElementUiViews: {}//編集UIのビューのサブクラスを格納
 	}
 	_this.docModules = {};
 	_this.docModulesView = {};

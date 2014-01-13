@@ -41,7 +41,9 @@
 		},
 		events: {
 			'click .cont_docCont_edit': 'uiEdit' ,
-			'click .cont_docCont_delete': 'uiDestroy'
+			'click .cont_docCont_delete': 'uiDestroy',
+			'mouseover': 'uiMouseOver',
+			'mouseout': 'uiMouseOut'
 		},
 		uiEdit: function(e) {
 			// 要素を編集する
@@ -61,6 +63,14 @@
 			// 要素を削除する
 			this.model.destroy();
 		},
+		uiMouseOver: function() {
+			this.$el.css({border:'1px solid #ff0000'});
+			this.$el.find('button').css({visibility:'visible'});
+		},
+		uiMouseOut: function() {
+			this.$el.css({border:'1px solid transparent'});
+			this.$el.find('button').css({visibility:'hidden'});
+		},
 		remove: function() {
 			this.$el.remove();
 		},
@@ -74,6 +84,7 @@
 		render: function() {
 			var template = this.template(this.model.toJSON());
 			this.$el.html(template);
+			this.uiMouseOut();
 			return this;
 		}
 	});

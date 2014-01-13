@@ -73,9 +73,8 @@ class pxplugin_contedit_models_modules{
 			}
 		}
 
-		// $rtn = array();
 		return $rtn;
-	}//parse_module()
+	}// parse_module()
 
 	/**
 	 * モジュールのIDからモジュールモデルを取得する
@@ -84,7 +83,7 @@ class pxplugin_contedit_models_modules{
 		$def = $this->get_module_definitions();
 		$rtn = $def['list'][$def['index'][$module_id]];
 		return $rtn;
-	}//get_module()
+	}// get_module()
 
 }
 

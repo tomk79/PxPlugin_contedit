@@ -118,38 +118,46 @@ body {
   padding: 20px;
   width: auto;
   max-width: 600px;
+  max-height: 600px;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.4);
+  overflow: auto;
 }
-/* line 112, ../../../../../src/sass/contConteditor.scss */
+/* line 114, ../../../../../src/sass/contConteditor.scss */
 .conteditUI.conteditUI-uiWinEditElements .conteditUI-uiWinEditElements_btnWrap {
   text-align: center;
   margin: 1em auto;
 }
-/* line 117, ../../../../../src/sass/contConteditor.scss */
+/* line 119, ../../../../../src/sass/contConteditor.scss */
 .conteditUI.conteditUI-uiWinEditElements table.conteditUI-formTable {
   border: none;
   border-collapse: collapse;
   text-align: left;
   width: 100%;
 }
-/* line 124, ../../../../../src/sass/contConteditor.scss */
+/* line 126, ../../../../../src/sass/contConteditor.scss */
 .conteditUI.conteditUI-uiWinEditElements table.conteditUI-formTable th,
 .conteditUI.conteditUI-uiWinEditElements table.conteditUI-formTable td {
   border: 1px solid #999999;
   background: #ffffff;
   padding: 10px;
 }
-/* line 129, ../../../../../src/sass/contConteditor.scss */
+/* line 131, ../../../../../src/sass/contConteditor.scss */
 .conteditUI.conteditUI-uiWinEditElements table.conteditUI-formTable th {
   background: #e7e7e7;
+  width: 25%;
 }
-/* line 133, ../../../../../src/sass/contConteditor.scss */
+/* line 135, ../../../../../src/sass/contConteditor.scss */
+.conteditUI.conteditUI-uiWinEditElements table.conteditUI-formTable td {
+  background: #fff;
+  width: 75%;
+}
+/* line 140, ../../../../../src/sass/contConteditor.scss */
 .conteditUI.conteditUI-uiWinEditElements table.conteditUI-formTable thead th,
 .conteditUI.conteditUI-uiWinEditElements table.conteditUI-formTable tfoot th {
   background: #d9d9d9;
   text-align: center;
 }
-/* line 138, ../../../../../src/sass/contConteditor.scss */
+/* line 145, ../../../../../src/sass/contConteditor.scss */
 .conteditUI.conteditUI-uiWinEditElements table.conteditUI-formTable thead td,
 .conteditUI.conteditUI-uiWinEditElements table.conteditUI-formTable tfoot td {
   background: #eeeeee;
