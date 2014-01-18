@@ -4,6 +4,7 @@
  * contedit modParser
  */
 class pxplugin_contedit_helpers_modParser{
+	private $element_id_index = 1;
 
 	/**
 	 * コンストラクタ
@@ -100,7 +101,14 @@ class pxplugin_contedit_helpers_modParser{
 		$rtn['type']       = 'func';
 		$rtn['func']       = $method;
 		$rtn['attributes'] = $attr;
+
+		if( strlen($rtn['attributes']['id']) ){
+			$rtn['edit_element_id'] = $rtn['attributes']['id'];
+		}else{
+			$rtn['edit_element_id'] = 'edit_element_'.($this->element_id_index++);
+		}
 		$rtn['children']   = $this->parse($bin_inner);
+
 		return $rtn;
 	}// create_text_node()
 

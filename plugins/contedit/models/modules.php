@@ -64,14 +64,7 @@ class pxplugin_contedit_models_modules{
 	public function parse_module( $bin ){
 		$mod_parser = $this->plugin_obj->factory_modParser();
 		$rtn = $mod_parser->parse( $bin, 'bin' );
-		$i = 1;
-		foreach( $rtn as $key=>$row ){
-			if( strlen($rtn[$key]['attributes']['id']) ){
-				$rtn[$key]['edit_element_id'] = $rtn[$key]['attributes']['id'];
-			}else{
-				$rtn[$key]['edit_element_id'] = 'edit_element_'.($i++);
-			}
-		}
+test::var_dump($rtn);
 		return $rtn;
 	}// parse_module()
 
