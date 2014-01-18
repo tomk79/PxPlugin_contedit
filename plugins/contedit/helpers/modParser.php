@@ -58,11 +58,29 @@ class pxplugin_contedit_helpers_modParser{
 	/**
 	 * 属性情報をパースする。
 	 */
-	private function parse_attributes( $attr_src ){
-		$rtn = array();
-		// UTODO: 開発中です。
-		return $rtn;
-	}
+	private function parse_attributes( $strings ){
+		#	属性の種類
+		$rnsp = '(?:\r\n|\r|\n| |\t)';
+		$prop = '(?:[a-z0-9A-Z_-]+\:)?[a-z0-9A-Z_-]+';
+		$typeA = '([\'"]?)(.*?)\3';	#	ダブルクオートあり
+		$typeB = '[^"\' ]+';		#	ダブルクオートなし
+
+		#	属性指定の式
+		$prop_exists = '/'.$rnsp.'*('.$prop.')(?:\=(?:('.$typeB.')|'.$typeA.'))?'.$rnsp.'*/s';
+
+		preg_match_all( $prop_exists , $strings , $results );
+		for( $i = 0; !is_null($results[0][$i]); $i++ ){
+			if( !strlen($results[3][$i]) ){
+				$results[4][$i] = null;
+			}
+			if( $results[2][$i] ){
+				$RTN[strtolower( $results[1][$i] )] = $results[2][$i];
+			}else{
+				$RTN[strtolower( $results[1][$i] )] = $results[4][$i];
+			}
+		}
+		return	$RTN;
+	}// parse_attributes()
 
 	/**
 	 * テキストノードを作成する
@@ -79,10 +97,10 @@ class pxplugin_contedit_helpers_modParser{
 	 */
 	private function create_template_node($method, $attr, $bin_inner){
 		$rtn = array();
-		$rtn['type']     = 'func';
-		$rtn['func']     = $method;
-		$rtn['attr']     = $attr;
-		$rtn['children'] = $this->parse($bin_inner);
+		$rtn['type']       = 'func';
+		$rtn['func']       = $method;
+		$rtn['attributes'] = $attr;
+		$rtn['children']   = $this->parse($bin_inner);
 		return $rtn;
 	}// create_text_node()
 

@@ -72,7 +72,6 @@ class pxplugin_contedit_models_modules{
 				$rtn[$key]['edit_element_id'] = 'edit_element_'.($i++);
 			}
 		}
-
 		return $rtn;
 	}// parse_module()
 
