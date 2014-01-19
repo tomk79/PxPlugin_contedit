@@ -115,6 +115,7 @@
 				content_data[model.get('edit_element_id')] = model.get('content_data');
 			}, this);
 			this.moduleContentModel.set('content_data', content_data);
+			// console.log( this.moduleContentModel.get('content_data') );
 			this.remove();
 			return false;
 		},

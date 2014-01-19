@@ -64,7 +64,6 @@ class pxplugin_contedit_models_modules{
 	public function parse_module( $bin ){
 		$mod_parser = $this->plugin_obj->factory_modParser();
 		$rtn = $mod_parser->parse( $bin, 'bin' );
-test::var_dump($rtn);
 		return $rtn;
 	}// parse_module()
 

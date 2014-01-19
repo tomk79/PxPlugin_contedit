@@ -85,37 +85,37 @@ window.contConteditor = new (function(){
 	 * すべての要素のロードが完了したら呼ばれる
 	 */
 	function editorOnLoad(){
-		_this.winIframe = window.conteditUICanvas;
+		EDITOR.winIframe = window.conteditUICanvas;
 
 		// コンテンツ編集画面を準備中表示に切り替える。
-		_elmContent = $('#content', _this.winIframe.document);
+		_elmContent = $('#content', EDITOR.winIframe.document);
 		_elmContent.html('<p>編集画面を準備しています。しばらくお待ち下さい。</p>');
 
 		// 遷移する処理を無効化
-		$('a', _this.winIframe.document).each(function(){
+		$('a', EDITOR.winIframe.document).each(function(){
 			this.href = 'javascript:alert(\'編集中のため押せません。\');'
 			this.onclick = 'alert(\'編集中のため押せません。\'); return false;'
 		});
-		$('form', _this.winIframe.document).each(function(){
+		$('form', EDITOR.winIframe.document).each(function(){
 			this.action = 'javascript:alert(\'編集中のため送信できません。\');'
 			this.onsubmit = 'alert(\'編集中のため送信できません。\'); return false;'
 		});
 
 		// document module collection を、一旦空白で作成する。
-		_this.docModules = new _this.cls.collections.documentModules(_moduleDefinitions.list);
-		_this.docModulesView = new _this.cls.views.documentModules({collection: _this.docModules});
+		EDITOR.docModules = new EDITOR.cls.collections.documentModules(_moduleDefinitions.list);
+		EDITOR.docModulesView = new EDITOR.cls.views.documentModules({collection: EDITOR.docModules});
 
 		// document contents collection を、一旦空白で作成する。
-		_this.docContents = new _this.cls.collections.moduleContents(_contentData);
-		_this.docContentsView = new _this.cls.views.moduleContents({collection: _this.docContents});
+		EDITOR.docContents = new EDITOR.cls.collections.moduleContents(_contentData);
+		EDITOR.docContentsView = new EDITOR.cls.views.moduleContents({collection: EDITOR.docContents});
 
 		// 編集画面を描画する
-		$('#content', _this.winIframe.document)
-			.html( _this.docContentsView.render().el )
+		$('#content', EDITOR.winIframe.document)
+			.html( EDITOR.docContentsView.render().el )
 		;
 
 		// 編集パネル
-		_this.uiControlPanel = new contConteditor.cls.views.uiControlPanel({collection: _this.docContents});
+		EDITOR.uiControlPanel = new contConteditor.cls.views.uiControlPanel({collection: EDITOR.docContents});
 
 	}//editorOnLoad()
 

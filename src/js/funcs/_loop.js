@@ -9,13 +9,12 @@
 		},
 		update: function(){
 			var val = this.$el.find('input').val();
-			var _this = this;
-			this.model.set('content_data', (function(){
-				var valBefore = _this.model.get('content_data');
-				if(!valBefore){ valBefore={}; }
-				valBefore.val = val;
-				return valBefore;
-			})());
+			var valBefore = this.model.get('content_data');
+			if(!valBefore){ valBefore={}; }
+			valBefore.count = val;
+			valBefore.children = new EDITOR.cls.collections.documentModules({});
+			valBefore.childrenView = new EDITOR.cls.views.documentModules({collection: valBefore.children});
+			this.model.set('content_data', valBefore);
 		} ,
 		template: _.template(
 			  '<th>Loop</th>'
@@ -28,7 +27,7 @@
 			var template = this.template(this.model.toJSON());
 			this.$el.html(template);
 			if( this.model.get('content_data') ){
-				this.$el.find('input').val(this.model.get('content_data').val);
+				this.$el.find('input').val(this.model.get('content_data').count);
 			}
 			return this;
 		}

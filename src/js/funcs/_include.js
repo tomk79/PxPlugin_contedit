@@ -9,13 +9,14 @@
 		} ,
 		update: function(){
 			var val = this.$el.find('select option:selected').attr('value');
-			var _this = this;
-			this.model.set('content_data', (function(){
-				var valBefore = _this.model.get('content_data');
-				if(!valBefore){ valBefore={}; }
-				valBefore.val = val;
-				return valBefore;
-			})());
+			var valBefore = this.model.get('content_data');
+			if(!valBefore){ valBefore={}; }
+			valBefore.module_id = val;
+			valBefore.include = new EDITOR.cls.models.moduleContent({
+				module_id: val
+			});
+			valBefore.includeView = new EDITOR.cls.views.moduleContent({model: valBefore.include});
+			this.model.set('content_data', valBefore);
 		} ,
 		template: _.template(
 			  '<th>インクルード</th>'
@@ -29,7 +30,7 @@
 			this.$el.html(template);
 			this.$el.find('select').append(EDITOR.docModulesView.mk_modSelectOptions());
 			if( this.model.get('content_data') ){
-				this.$el.find('select option[value="'+this.model.get('content_data').val+'"]').attr({selected:'selected'});
+				this.$el.find('select option[value="'+this.model.get('content_data').module_id+'"]').attr({selected:'selected'});
 			}
 			return this;
 		}

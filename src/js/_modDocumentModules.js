@@ -7,15 +7,17 @@
 	 * ドキュメントモジュール: モデル
 	 */
 	EDITOR.cls.models.documentModule = Backbone.Model.extend({
+		idAttribute: 'module_id' ,
 		defaults:{
-			id: null,
+			module_id: null,
 			category: null,
 			name: null,
-			label: 'unknown'
+			label: 'unknown',
+			template: []
 		},
 		initialize: function(){
 			// console.log('--- init model documentModule ---');
-			this.set('id', this.get('category')+'/'+this.get('name'));
+			// this.set('id', this.get('module_id') );
 			// console.log(this.toJSON());
 		}
 	});
@@ -36,25 +38,6 @@
 	 */
 	EDITOR.cls.views.documentModule = Backbone.View.extend({
 		tagName: 'li',
-		initialize: function() {
-			// this.model.on('destroy', this.remove, this);
-			// this.model.on('change', this.render, this);
-		},
-		events: {
-			// 'click .delete': 'destroy',
-			// 'click .toggle': 'toggle'
-		},
-		toggle: function() {
-			// this.model.set('completed', !this.model.get('completed'));
-		},
-		destroy: function() {
-			// if (confirm('are you sure?')) {
-			// 	this.model.destroy();
-			// }
-		},
-		remove: function() {
-			// this.$el.remove();
-		},
 		template: _.template('<%- label %>'),
 		render: function() {
 			var template = this.template(this.model.toJSON());
@@ -69,12 +52,7 @@
 	EDITOR.cls.views.documentModules = Backbone.View.extend({
 		tagName: 'select',
 		initialize: function() {
-			// this.collection.on('add', this.addNew, this);
 		} ,
-		// addNew: function(docMod) {
-		// 	var docModView = new EDITOR.cls.views.documentModule({model: docMod});
-		// 	this.$el.append(docModView.render().el);
-		// } ,
 		render: function() {
 			this.collection.each(function(docMod) {
 				var docModView = new EDITOR.cls.views.documentModule({model: docMod});
@@ -86,7 +64,7 @@
 			// オプション選択要のプルダウンを作成
 			var rtn = '';
 			this.collection.each(function(docMod) {
-				rtn += '<option value="'+docMod.get('id')+'">';
+				rtn += '<option value="'+docMod.get('module_id')+'">';
 				rtn += docMod.get('label');
 				rtn += '</option>';
 			}, this);

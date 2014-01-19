@@ -40,7 +40,7 @@ class pxplugin_contedit_helpers_modParser{
 			$elm['before']     = $matched[$idx++];
 			$elm['func']       = trim($matched[$idx++]);
 			$elm['attribute_src'] = trim($matched[$idx++]);
-			$elm['attributes'] = $this->parse_attributes( $elm['attribute_src'] );//開発中
+			$elm['attributes'] = $this->parse_attributes( $elm['attribute_src'] );
 			$elm['after']      = $matched[$idx++];
 
 			if( strlen($elm['before']) ){
