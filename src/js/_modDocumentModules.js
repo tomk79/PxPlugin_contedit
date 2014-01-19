@@ -19,6 +19,7 @@
 			// console.log('--- init model documentModule ---');
 			// this.set('id', this.get('module_id') );
 			// console.log(this.toJSON());
+			return this;
 		}
 	});
 
@@ -29,6 +30,7 @@
 		initialize: function(){
 			// console.log('--- init collection documentModules');
 			// console.log(this.toJSON());
+			return this;
 		},
 		model: EDITOR.cls.models.documentModule
 	});
@@ -52,6 +54,7 @@
 	EDITOR.cls.views.documentModules = Backbone.View.extend({
 		tagName: 'select',
 		initialize: function() {
+			return this;
 		} ,
 		render: function() {
 			this.collection.each(function(docMod) {

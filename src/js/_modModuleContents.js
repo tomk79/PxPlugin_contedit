@@ -16,18 +16,18 @@
 		},
 		toJSON: function(){
 			var rtn = {};
-			rtn = this.attributes;
+			_.extend(rtn, this.attributes);
 
 			for( var i in rtn.content_data ){
-				if( rtn.content_data[i].children ){
+				if( rtn.content_data[i].children && rtn.content_data[i].children.toJSON ){
 					// ネストされたBackboneオブジェクトをJSONに変換
-					console.log('before children.toJSON()');
+					// console.log('before children.toJSON()');
 					rtn.content_data[i].children = rtn.content_data[i].children.toJSON();
 					delete rtn.content_data[i].childrenView;
 				}
-				if( rtn.content_data[i].include ){
+				if( rtn.content_data[i].include && rtn.content_data[i].include.toJSON ){
 					// ネストされたBackboneオブジェクトをJSONに変換
-					console.log('before include.toJSON()');
+					// console.log('before include.toJSON()');
 					rtn.content_data[i].include = rtn.content_data[i].include.toJSON();
 					delete rtn.content_data[i].includeView;
 				}
@@ -52,32 +52,35 @@
 			this.set('module_label', module.get('label') );
 
 			for( var i in module.get('template') ){
-				if( !module.get('template')[i].edit_element_id ){
+				var editElementId = module.get('template')[i].edit_element_id;
+				if( !editElementId ){
 					continue;
 				}
 				if( module.get('template')[i].func == 'loop' ){
 					// ネストされたloopのJSONをBackboneオブジェクトに変換
-					if( this.get('content_data')[module.get('template')[i].edit_element_id] ){
-						if( this.get('content_data')[module.get('template')[i].edit_element_id].children ){
-							var contentData = this.get('content_data');
-							contentData[module.get('template')[i].edit_element_id].children = new EDITOR.cls.collections.moduleContents( contentData[module.get('template')[i].edit_element_id].children );
-							contentData[module.get('template')[i].edit_element_id].childrenView = new EDITOR.cls.views.moduleContents({collection: contentData[module.get('template')[i].edit_element_id].children});
-							this.set( 'content_data', contentData );
+					if( this.get('content_data')[editElementId] ){
+						if( this.get('content_data')[editElementId].children ){
+							var editElementId = editElementId;
+							this.attributes.content_data[editElementId].children = new EDITOR.cls.collections.moduleContents( this.attributes.content_data[editElementId].children );
+							this.attributes.content_data[editElementId].childrenView = new EDITOR.cls.views.moduleContents({collection: this.attributes.content_data[editElementId].children});
 						}
 					}
 				}
 				if( module.get('template')[i].func == 'include' ){
 					// ネストされたincludeのJSONをBackboneオブジェクトに変換
-					if( this.get('content_data')[module.get('template')[i].edit_element_id] ){
-						if( this.get('content_data')[module.get('template')[i].edit_element_id].include ){
-							var contentData = this.get('content_data');
-							contentData[module.get('template')[i].edit_element_id].include = new EDITOR.cls.collections.moduleContents( [contentData[module.get('template')[i].edit_element_id].include] );
-							contentData[module.get('template')[i].edit_element_id].includeView = new EDITOR.cls.views.moduleContents({collection: contentData[module.get('template')[i].edit_element_id].include});
-							this.set( 'content_data', contentData );
+					if( this.get('content_data')[editElementId] ){
+						if( this.get('content_data')[editElementId].include ){
+							this.attributes.content_data[editElementId].include = new EDITOR.cls.models.moduleContent( this.attributes.content_data[editElementId].include );
+							this.attributes.content_data[editElementId].includeView = new EDITOR.cls.views.moduleContent({model: this.attributes.content_data[editElementId].include});
+// console.log(this.attributes);
+// console.log(this.attributes.content_data);
+// console.log(this.attributes.content_data[editElementId]);
+// console.log(this.attributes.content_data[editElementId].includeView);
 						}
 					}
 				}
 			}
+			return this;
 		}
 	});
 
@@ -123,29 +126,36 @@
 				.setTargetModel(this.model)
 				.render()
 			;
+			return this;
 		},
 		uiDestroy: function() {
 			// 要素を削除する
 			this.model.destroy();
+			return this;
 		},
 		uiUp: function() {
 			// 上に並び替えます。
 			alert('[開発中] 上に並び替えます。');
+			return this;
 		},
 		uiDown: function() {
 			// 下に並び替えます。
 			alert('[開発中] 下に並び替えます。');
+			return this;
 		},
 		uiMouseOver: function() {
 			this.$el.css({border:'1px solid #ff0000'});
 			this.$el.find('button').css({visibility:'visible'});
+			return this;
 		},
 		uiMouseOut: function() {
 			this.$el.css({border:'1px solid transparent'});
 			this.$el.find('button').css({visibility:'hidden'});
+			return this;
 		},
 		remove: function() {
 			this.$el.remove();
+			return this;
 		},
 		template: _.template(
 			  '<div>'
@@ -159,6 +169,7 @@
 		),
 		update: function(){
 			alert('updated');
+			return this;
 		} ,
 		render: function() {
 			var template = this.template(this.model.toJSON());
@@ -166,9 +177,12 @@
 			this.uiMouseOut();
 
 			// var contentData = this.model.get('content_data');
-			// console.log(this.model.get('content_data').edit_element_1);
-			// console.log(this.model.get('content_data').edit_element_1.include);
-			// console.log(this.model.get('content_data').edit_element_1.includeView);
+			// console.log(this.model.attributes.content_data);
+			// if( this.model.attributes.content_data.edit_element_1 ){
+			// 	console.log(this.model.attributes.content_data.edit_element_1);
+			// 	console.log(this.model.attributes.content_data.edit_element_1.include);
+			// 	console.log(this.model.attributes.content_data.edit_element_1.includeView);
+			// }
 			// console.log( this.model );
 			// console.log( contentData.includeView );
 			// this.$el.find('conteditUI-children')
@@ -186,6 +200,7 @@
 		tagName: 'div',
 		initialize: function() {
 			this.collection.on('add', this.addNew, this);
+			return this;
 		} ,
 		events: {
 			// 'click .delete': 'destroy',
@@ -194,6 +209,7 @@
 		addNew: function(docMod) {
 			var docModView = new EDITOR.cls.views.moduleContent({model: docMod});
 			this.$el.append(docModView.render().el);
+			return this;
 		} ,
 		render: function() {
 			this.collection.each(function(docMod) {

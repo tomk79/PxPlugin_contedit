@@ -93,6 +93,7 @@
 	EDITOR.cls.views.uiWinEditElements = Backbone.View.extend({
 		tagName: 'div',
 		initialize: function() {
+			return this;
 		},
 		events: {
 			'click .conteditUI-btn_cancel': 'uiCancel',
